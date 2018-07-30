@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style type="text/css">
+    body {
+        font: 10px sans-serif;
+    }
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        stroke-width: 2px;
+        shape-rendering: crispEdges;
+    }
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+    </style>
+
+</head>
+
+<body>
+
+</body>
+<script type="text/javascript">
+
+// receive relevant data from Django
+var received_data  = JSON.parse('{{ data | safe }}');
+
+var margin = {top: 20, right: 55, bottom: 60, left: 50},
+    width = 400 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+    function display_bar(){
+        data = received_data.bardata
+        // Get student group assignment
+        var assignment = data[data.length-1]
+        data.splice(-1,1)
+
+        // Get total number of students
+        var total = 0
+        data.forEach(function(d){
+          total += d.size
+        });
+
+        // Normalize data
+        data.forEach(function(d){
+          d.size = d.size/total
+        });
+
+        // Set ranges
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+            y = d3.scaleLinear().rangeRound([height, 0]);
+
+        x.domain(data.map(function(d) { return d.bucket; }));
+        y.domain([0,1]);
+
+        var svg_Bar = d3.select("body").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        svg_Bar.append("text")
+          .attr("x", (width / 2))
+          .attr("y", 0 - (margin.top / 2))
+          .attr("text-anchor", "middle")
+          .style("font-size", "12px")
+          .style("text-decoration", "underline")
+          .text("Gemiddeld cijfer");
+
+        // X axis label
+        svg_Bar.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "end")
+          .attr("x", width)
+          .attr("y", height+30)
+          .text("Gemiddeld cijfer");
+
+        // Y axis label
+        svg_Bar.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("transform", "rotate(-90)")
+          .attr("x", 3)
+          .attr("y", -40)
+          .text("Percentage studenten");
+
+        var g = svg_Bar.append("g")
+            // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // X axis
+        svg_Bar.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // Y axis
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y).ticks(10, "%"))
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text("size");
+
+        // Bars
+        g.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+            .attr("class", "bar")
+            .attr("border", 10)
+            .style("stroke", function(d){
+              if (d.bucket == assignment.assignment) { return "black" }
+              else { return "#CCE0F4" } })
+            .attr("fill", function(d) {
+              if (d.bucket == assignment.assignment) { return "#FBCFA0" }
+              else { return "#CCE0F4" } })
+            .attr("x", function(d) { return x(d.bucket); })
+            .attr("y", function(d) { return y(d.size); })
+            .attr("width", x.bandwidth())
+            .attr("height", function(d) { return height - y(d.size); });
+    }
+
+function display_Gaussian() {
+    params = received_data.gaussdata
+    var mean = params.weighted_grade;
+    var sigma = params.sigma
+
+    // var passProb = Number(normalcdf(mean, sigma, 5.5).toFixed(2))
+
+  var data = getData(mean, sigma);
+
+  var x = d3.scaleLinear()
+      .range([0, width])
+      .domain([0,10]);
+
+  var y = d3.scaleLinear()
+      .range([height, 0])
+      .domain([0,1]);
+
+  var xAxis = d3.axisBottom()
+    .scale(x);
+
+  var yAxis = d3.axisLeft()
+    .scale(y)
+    .tickFormat(d3.format(".0%"))
+
+  var line = d3.line()
+      .x(function(d) {
+          return x(d.q);
+      })
+      .y(function(d) {
+          return y(d.p);
+      });
+
+  var svg_Gauss = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // X axis label
+  svg_Gauss.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width)
+    .attr("y", height+30)
+    .text("Eindcijfer");
+
+  // X axis passprob
+  svg_Gauss.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", width/2)
+    .attr("y", height+50)
+    // .text("Geschatte kans op eindcijfer > 5.5: "+passProb*100+"%");
+    .text("Behoudens ondergrens eisen.")
+
+  // Y axis label
+  svg_Gauss.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("transform", "rotate(-90)")
+    .attr("x", 3)
+    .attr("y", -40)
+    .text("Kans op eindcijfer");
+
+  svg_Gauss.append("text")
+    .attr("x", (width / 2))
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .style("text-decoration", "underline")
+    .text("Voorspeld eindcijfer");
+
+  svg_Gauss.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg_Gauss.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+  svg_Gauss.append("path")
+      .datum(data)
+      .attr("class", "line")
+      .attr("d", line);
+}
+
+function getData(mean, sigma) {
+  // loop to populate data array with
+  // probabily - quantile pairs
+  data = [];
+  for (var i = 0; i < 100000; i++) {
+      q = normal(-2,12,1) // calc random draw from normal dist
+      p = gaussian(q, mean, sigma) // calc prob of rand draw
+
+      el = { "q": q, "p": p}
+      if (q < 10.0 && q > 0){ data.push(el) }
+  };
+  // Sort data for plotting
+  data.sort(function(x, y) {
+      return x.q - y.q;
+  });
+  return data
+}
+
+function normal(min, max, skew) {
+    var u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+
+    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+    if (num > 1 || num < 0) num = normal(min, max, skew); // resample between 0 and 1 if out of range
+    num *= max - min; // Stretch to fill range
+    num += min; // offset to min
+    return num;
+}
+
+//taken from Jason Davies science library
+// https://github.com/jasondavies/science.js/
+function gaussian(x, mean, sigma) {
+	var gaussianConstant = 1 / Math.sqrt(2 * Math.PI),
+    x = (x - mean) / sigma;
+    return gaussianConstant * Math.exp(-.5 * x * x) / sigma;
+};
+
+// function normalcdf(mean, sigma, x) {
+//     // see wolframalpha.com
+//     var z = (x-mean)/Math.sqrt(2*sigma*sigma);
+//     var t = 1/(1+0.3275911*Math.abs(z));
+//     var a1 =  0.254829592;
+//     var a2 = -0.284496736;
+//     var a3 =  1.421413741;
+//     var a4 = -1.453152027;
+//     var a5 =  1.061405429;
+//     var erf = 1-(((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-z*z);
+//     var sign = 1;
+//     if(z < 0) { sign = -1; }
+//     return 1-((1/2)*(1+sign*erf));
+// };
+
+display_bar()
+display_Gaussian()
+
+</script>
+
+
+</html>
