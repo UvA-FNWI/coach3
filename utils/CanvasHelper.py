@@ -6,9 +6,9 @@ import numpy as np
 
 ### SETUP ###
 # Canvas API URL
-API_URL = open('api_url.txt', 'r').readlines()[0]
+API_URL = open('api_url.txt', 'r').readlines()[0].strip()
 # Canvas API key
-API_KEY = open('api_key.txt', 'r').readlines()[0]
+API_KEY = open('api_key.txt', 'r').readlines()[0].strip()
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 # Course ID (can be found in URL)
