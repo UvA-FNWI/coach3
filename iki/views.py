@@ -15,9 +15,6 @@ def index(request):
     # See whether student has given consent
     consent = given_consent(student_id)
 
-
-    # @TODO: (maybe) store data in db every n minutes? (So that not retrieved every time.)
-
     if consent:
         template = loader.get_template('iki/visuals.html')
         # Obtain data using CanvasHelper get_data function and send to html
