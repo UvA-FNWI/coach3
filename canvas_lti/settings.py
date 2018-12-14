@@ -25,7 +25,7 @@ SECRET_KEY = '0v-n_tq)-s8f$8%2=nw+f41do*1wg6d*ja=+m2dm56n=fl&trt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://learn-lti.herokuapp.com/', 'localhost']
+ALLOWED_HOSTS = ['https://learn-lti.herokuapp.com/', 'localhost', '127.0.0.1']
 
 
 # Application definition
