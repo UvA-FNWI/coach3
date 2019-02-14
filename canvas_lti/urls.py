@@ -18,8 +18,13 @@ from django.urls import path
 
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls import url
+
+import django_app_lti.urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
      path('iki/', include('iki.urls')),
+     url(r'^lti/', include(('django_app_lti.urls','lti'), namespace="lti")),
 ]

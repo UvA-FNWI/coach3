@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django_extensions',
     'django.contrib.staticfiles',
+    'django_auth_lti',
+    'django_app_lti',
+
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auth_lti.middleware.LTIAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'canvas_lti.urls'
@@ -100,6 +104,37 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Add to authentication backends (for django-auth-lti)
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django_auth_lti.backends.LTIAuthBackend',
+]
+
+# Add LTI configuration settings (for django-app-lti)
+LTI_SETUP = {
+    "TOOL_TITLE": "My tool name",
+    "TOOL_DESCRIPTION": "My tool description",
+    "LAUNCH_URL": "lti:launch",
+    "LAUNCH_REDIRECT_URL": "myapp:index",
+    "INITIALIZE_MODELS": False, # Options: False|resource_only|resource_and_course|resource_and_course_users
+    "EXTENSION_PARAMETERS": {
+        "canvas.instructure.com": {
+            "privacy_level": "public",
+            "course_navigation": {
+                "enabled": "true",
+                "default": "disabled",
+                "text": "My tool (localhost)",
+            }
+        }
+    }
+}
+
+# Add LTI oauth credentials (for django-auth-lti)
+LTI_OAUTH_CREDENTIALS = {
+    "mykey":"mysecret",
+    "myotherkey": "myothersecret",
+}
 
 
 # Internationalization

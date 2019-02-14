@@ -36,7 +36,7 @@ def frequency_count(gradedict, student_id, nr_bins=10, minn=0.0, maxx=100.0):
         ret.append([start, start+binsize, 0])
         data.append({'bucket':int(((start+(start+binsize))/2)) ,'size':0})
     #assign items to bin
-    for item in list(gradedict.values()):
+    for item in gradedict.values():
         for i,binn in enumerate(ret):
             if binn[0] <= item < binn[1]:
                     data[i]['size'] += 1
