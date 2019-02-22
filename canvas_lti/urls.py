@@ -15,16 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
-from django.contrib import admin
-from django.urls import include, path
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 import django_app_lti.urls
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('iki/', include('iki.urls')),
-     url(r'^lti/', include(('django_app_lti.urls','lti'), namespace="lti")),
+     path('iki/', include(('iki.urls', 'iki'), namespace="iki")),
+     url(r'^lti/', include((django_app_lti.urls, 'lti'), namespace="lti")),
+     #path('accounts/login/', include(django_app_lti.urls))
 ]

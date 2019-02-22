@@ -113,11 +113,11 @@ AUTHENTICATION_BACKENDS = [
 
 # Add LTI configuration settings (for django-app-lti)
 LTI_SETUP = {
-    "TOOL_TITLE": "My tool name",
-    "TOOL_DESCRIPTION": "My tool description",
+    "TOOL_TITLE": "Coach3",
+    "TOOL_DESCRIPTION": "Learning Analytics Dashboard",
     "LAUNCH_URL": "lti:launch",
-    "LAUNCH_REDIRECT_URL": "myapp:index",
-    "INITIALIZE_MODELS": False, # Options: False|resource_only|resource_and_course|resource_and_course_users
+    "LAUNCH_REDIRECT_URL": "iki:index",
+    "INITIALIZE_MODELS": "resource_and_course", # Options: False|resource_only|resource_and_course|resource_and_course_users
     "EXTENSION_PARAMETERS": {
         "canvas.instructure.com": {
             "privacy_level": "public",
@@ -132,8 +132,7 @@ LTI_SETUP = {
 
 # Add LTI oauth credentials (for django-auth-lti)
 LTI_OAUTH_CREDENTIALS = {
-    "mykey":"mysecret",
-    "myotherkey": "myothersecret",
+    "ee2caf403070c663d99a89396cf1023c": "103f4e9bc68c2d88dc217537e3da52a701198cc2476bb9da71830097d2e0364a",
 }
 
 
