@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['https://learn-lti.herokuapp.com/', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'iki',
+    'iki_lti',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -117,7 +118,7 @@ LTI_SETUP = {
     "TOOL_DESCRIPTION": "Learning Analytics Dashboard",
     "LAUNCH_URL": "lti:launch",
     "LAUNCH_REDIRECT_URL": "iki:index",
-    "INITIALIZE_MODELS": "resource_and_course", # Options: False|resource_only|resource_and_course|resource_and_course_users
+    "INITIALIZE_MODELS": "resource_and_course_users", # Options: False|resource_only|resource_and_course|resource_and_course_users
     "EXTENSION_PARAMETERS": {
         "canvas.instructure.com": {
             "privacy_level": "public",

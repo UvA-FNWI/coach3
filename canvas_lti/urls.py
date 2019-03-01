@@ -23,6 +23,6 @@ import django_app_lti.urls
 urlpatterns = [
     path('admin/', admin.site.urls),
      path('iki/', include(('iki.urls', 'iki'), namespace="iki")),
-     url(r'^lti/', include((django_app_lti.urls, 'lti'), namespace="lti")),
+     url(r'^lti/', include(('iki_lti.urls', 'lti'), namespace="lti")),
      #path('accounts/login/', include(django_app_lti.urls))
 ]
