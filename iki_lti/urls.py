@@ -1,11 +1,12 @@
 from django.conf.urls import url
 
-from .views import MyLTILaunchView
+#from .views import MyLTILaunchView, MyLTIResponse
+#from .views import LaunchView
+from . import views
+
 
 urlpatterns = [
-    #url(r'^$', LTILaunchView.as_view(), name='index'),
-    url(r'^launch$', MyLTILaunchView.as_view(), name='launch'),
-    #url(r'^config$', LTIToolConfigView.as_view(), name='config'),
-    #url(r'^logout$', logout_view, name="logout"),
-    #url(r'^logged-out$', logged_out_view, name="logged-out"),
+    url(r'^launch$',views.lti_launch, name="launch"),
+    #url(r'^launch$',views.LTILaunchView.as_view(), name="launch"),
+    url(r'^config$', views.LTIToolConfigView.as_view(), name='config'),
 ]

@@ -17,12 +17,16 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 
-import django_app_lti.urls
+#import django_app_lti.urls
+import iki_lti.urls
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('iki/', include(('iki.urls', 'iki'), namespace="iki")),
-     url(r'^lti/', include(('iki_lti.urls', 'lti'), namespace="lti")),
-     #path('accounts/login/', include(django_app_lti.urls))
+    path('iki/', include(('iki.urls', 'iki'), namespace="iki")),
+    path('lti/', include(('iki_lti.urls', 'lti'), namespace = 'lti')),
+     #url(r'^lti/', include(('iki_lti.urls', 'lti'), namespace="lti")),
+     # url(r'^lti/', include((django_app_lti.urls, 'lti'), namespace="lti")),
+     # #path('accounts/login/', include(django_app_lti.urls))
+     # path('accounts/', include('django.contrib.auth.urls')),
 ]

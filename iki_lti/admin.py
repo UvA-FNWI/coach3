@@ -1,7 +1,4 @@
 from django.contrib import admin
-from iki_lti.models import MyLTICourse, MyLTICourseUser, MyLTIResource
+from iki.models import User
 
-# Register your models here.
-admin.site.register(MyLTICourse)
-admin.site.register(MyLTIResource)
-admin.site.register(MyLTICourseUser)
+admin.site.register(User)

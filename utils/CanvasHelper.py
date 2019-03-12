@@ -57,7 +57,7 @@ def get_sigma(completion, minn=2, maxx=.4):
         return maxx
 
 " Returns user data for both barplot and Gaussian plot"
-def get_data():
+def get_data(student):
     # Calculate all current scores (ignoring ungraded assignments)
     current_score = current_scores(course)
 
