@@ -31,14 +31,14 @@ def index(request, user_id):
 
     student_id = user_id
 
-    students = User.objects.filter(iki_user_id=user_id)
+    students = User.objects.filter(iki_user_id=student_id)
     if students.count() > 0:
-        student=students[0]
+        student = students[0]
     else:
         raise ValueError("There is no student for the given user id")
 
     # See whether student has given consent
-    #consent = given_consent(student_id)
+    #consent = given_consent(student)
     consent=True
 
     if consent:

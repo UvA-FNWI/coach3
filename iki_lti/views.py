@@ -108,18 +108,10 @@ class LTILaunchView(CsrfExemptMixin, View):
 
         if users.count() > 0:
             user = users[0]
-            kwargs = {"lti_id": user.get_lti_id()}
-            args = {"lti_id": user.get_lti_id()}
-            #return HttpResponseRedirect(reverse('iki:index', args=args))
-            return redirect(reverse("/iki/visuals.html"))
-            #return self.lti_redirect()
+            #return redirect('iki:index', user_id=user.iki_user_id)
         else:
             user = User.create_user(params)
-            kwargs = {"lti_userid": user.get_lti_id()}
-            args = {"lti_userid": user.get_lti_id()}
-            #return redirect(reverse(launch_redirect_url), kwargs=kwargs)
-            #return redirect(reverse(launch_redirect_url), kwargs=kwargs)
-            #return redirect(reverse("/iki/"))
+        return redirect('iki:index', user_id=user.iki_user_id)
 
 
 
