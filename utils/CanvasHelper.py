@@ -1,6 +1,8 @@
 from canvasapi import Canvas
+# from utils.Grade_prediction import predict
 import json
 import numpy as np
+
 
 # @TODO: change to IKI environment (UvA)
 
@@ -88,7 +90,7 @@ def get_data(user):
     # weights = {'W1WG2':.1, 'W2WG2':.1, 'W3WG1':.1, 'W5WG1':.1, 'W6WG1':.1, 'W7WG1':.1, 'P1':.1, 'P2':.1, 'SAM':.1, 'POS':.1, 'DT1':.25, 'DT2':.25}
     # @TODO: dynamically set completion
     completion = .7
-    gaussdata = {"weighted_grade":current_score[student_id]/10,"completion":completion, "sigma":get_sigma(completion)}
+    gaussdata = {"weighted_grade": current_score[student_id]/10, "completion": completion, "sigma": get_sigma(completion)}
 
     return {"bardata": bardata, "gaussdata": gaussdata, "student_name": student_name}
 

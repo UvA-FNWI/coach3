@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from utils.CanvasHelper import get_data, given_consent
 import json
 from django.conf import settings
-from django.core.urlresolvers import reverse
+# from django.core.urlresolvers import reverse
 
 import enum
 
@@ -16,7 +16,7 @@ from ims_lti_py.tool_config import ToolConfig
 from django.views.generic import View
 import urllib.request, urllib.parse, urllib.error
 from django.http import HttpResponse, HttpResponseRedirect
-from braces.views import CsrfExemptMixin
+# from braces.views import CsrfExemptMixin
 from django.shortcuts import render, get_object_or_404
 from .models import User
 

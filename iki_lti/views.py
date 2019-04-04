@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from utils.CanvasHelper import get_data, given_consent
 import json
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 import enum
 
@@ -16,7 +16,7 @@ from ims_lti_py.tool_config import ToolConfig
 from django.views.generic import View
 import urllib.request, urllib.parse, urllib.error
 from django.http import HttpResponse, HttpResponseRedirect
-from braces.views import CsrfExemptMixin
+# from braces.views import CsrfExemptMixin
 
 
 
@@ -73,47 +73,46 @@ def lti_launch(request):
     return redirect("iki:index", user_id=user.iki_user_id)
 
 
-class LTILaunchView(CsrfExemptMixin, View):
-
-    def post(self, request, *args, **kwargs):
-        self.launch()
-
-    @classmethod
-    def lti_redirect():
-        launch_redirect_url = LTI_SETUP['LAUNCH_REDIRECT_URL']
-        return redirect(reverse(launch_redirect_url))
-
-    def launch(request):
-        """Django view for the lti post request.
-
-        Verifies the given LTI parameters based on our secret. If the user does not
-        yet exist, and is allowed to interact with the tool, a new user is created.
-        The page is then redirected to the index page.
-
-        """
-
-        secret = settings.LTI_SECRET
-        key = settings.LTI_KEY
-
-        # try:
-        #     factory.OAuthRequestValidater.check_signature(key, secret, request)
-        # except (oauth2.Error, ValueError):
-        #     return redirect(factory.create_lti_query_link(QueryDict.fromkeys(['state'], LTI_STATES.BAD_AUTH.value)))
-        factory.OAuthRequestValidater.check_signature(key, secret, request)
-
-        launch_redirect_url = LTI_SETUP['LAUNCH_REDIRECT_URL']
-        params = request.POST.dict()
-        lti_user_id = params['user_id']
-        users = User.objects.filter(lti_id=lti_user_id)
-
-        if users.count() > 0:
-            user = users[0]
-            #return redirect('iki:index', user_id=user.iki_user_id)
-        else:
-            user = User.create_user(params)
-        return redirect('iki:index', user_id=user.iki_user_id)
-
-
+# class LTILaunchView(CsrfExemptMixin, View):
+#
+#     def post(self, request, *args, **kwargs):
+#         self.launch()
+#
+#     @classmethod
+#     def lti_redirect():
+#         launch_redirect_url = LTI_SETUP['LAUNCH_REDIRECT_URL']
+#         return redirect(reverse(launch_redirect_url))
+#
+#     def launch(request):
+#         """Django view for the lti post request.
+#
+#         Verifies the given LTI parameters based on our secret. If the user does not
+#         yet exist, and is allowed to interact with the tool, a new user is created.
+#         The page is then redirected to the index page.
+#
+#         """
+#
+#         secret = settings.LTI_SECRET
+#         key = settings.LTI_KEY
+#
+#         # try:
+#         #     factory.OAuthRequestValidater.check_signature(key, secret, request)
+#         # except (oauth2.Error, ValueError):
+#         #     return redirect(factory.create_lti_query_link(QueryDict.fromkeys(['state'], LTI_STATES.BAD_AUTH.value)))
+#         factory.OAuthRequestValidater.check_signature(key, secret, request)
+#
+#         launch_redirect_url = LTI_SETUP['LAUNCH_REDIRECT_URL']
+#         params = request.POST.dict()
+#         lti_user_id = params['user_id']
+#         users = User.objects.filter(lti_id=lti_user_id)
+#
+#         if users.count() > 0:
+#             user = users[0]
+#             #return redirect('iki:index', user_id=user.iki_user_id)
+#         else:
+#             user = User.create_user(params)
+#         return redirect('iki:index', user_id=user.iki_user_id)
+#
 
 
 class LTIToolConfigView(View):

@@ -124,8 +124,17 @@ LTI_SETUP = {
             "privacy_level": "public",
             "course_navigation": {
                 "enabled": "true",
-                "default": "disabled",
-                "text": "My tool (localhost)",
+                "default": "enabled",
+                "text": "Coach (localhost)",
+                "visibility": "public",
+                "url": "http://localhost:8000/lti/launch",
+            },
+            "course_home_sub_navigation": {
+                "enabled": "true",
+                "default": "enabled",
+                "text": "Coach (localhost)",
+                "visibility": "public",
+                "url": "http://localhost:8000/lti/launch",
             }
         }
     }
