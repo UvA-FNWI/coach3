@@ -1,3 +1,4 @@
+ims_lti_py
 asn1crypto==0.24.0
 canvasapi==0.10.0
 certifi==2018.4.16
@@ -16,3 +17,4 @@ six==1.11.0
 urllib3==1.23
 uWSGI==2.0.17.1
 Werkzeug==0.14.1
+oauth2==1.9.0.post1

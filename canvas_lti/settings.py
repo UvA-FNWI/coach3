@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django_extensions',
     'django.contrib.staticfiles',
-    'django_auth_lti',
-    'django_app_lti',
+    #'django_auth_lti',
+    #'django_app_lti',
 
 ]
 
@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_auth_lti.middleware.LTIAuthMiddleware',
+    # 'django_auth_lti.middleware.LTIAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'canvas_lti.urls'
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'canvas_lti.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,29 +88,29 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+# # Password validation
+# # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+#
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-# Add to authentication backends (for django-auth-lti)
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'django_auth_lti.backends.LTIAuthBackend',
-]
+# # Add to authentication backends (for django-auth-lti)
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'django_auth_lti.backends.LTIAuthBackend',
+# ]
 
 # Add LTI configuration settings (for django-app-lti)
 LTI_SETUP = {
@@ -124,17 +124,38 @@ LTI_SETUP = {
             "privacy_level": "public",
             "course_navigation": {
                 "enabled": "true",
-                "default": "disabled",
-                "text": "My tool (localhost)",
+                "default": "enabled",
+                "text": "Coach (localhost)",
+                "visibility": "public",
+                "url": "http://localhost:8000/lti/launch",
+            },
+            "course_home_sub_navigation": {
+                "enabled": "true",
+                "default": "enabled",
+                "text": "Coach (localhost)",
+                "visibility": "public",
+                "url": "http://localhost:8000/lti/launch",
             }
         }
     }
 }
 
-# Add LTI oauth credentials (for django-auth-lti)
-LTI_OAUTH_CREDENTIALS = {
-    "ee2caf403070c663d99a89396cf1023c": "103f4e9bc68c2d88dc217537e3da52a701198cc2476bb9da71830097d2e0364a",
-}
+# LTI_SECRET = "69dc913725629f46f9a4324490a61ca82cdb360f354a7c2ca5d6b21994f5ddc0"
+# LTI_KEY = "9bd2b1cfd3857f5274e8fd7ec428857e"
+
+LTI_SECRET = '4339900ae5861f3086861ea492772864'
+LTI_KEY = '0cd500938a8e7414ccd31899710c98ce'
+
+
+BASELINK = 'http://localhost:8080'
+
+#AUTH_USER_MODEL = "iki_lti.User"
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+# }
 
 
 # Internationalization
@@ -155,3 +176,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+#LOGIN_REDIRECT_URL = 'index'
