@@ -1,8 +1,4 @@
-from django.http import HttpResponse
-from django.template import Context, loader
 from django.shortcuts import render, redirect
-from utils.CanvasHelper import get_data, given_consent
-import json
 from django.conf import settings
 from django.urls import reverse
 
