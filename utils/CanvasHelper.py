@@ -2,6 +2,7 @@ from canvasapi import Canvas
 # from utils.Grade_prediction import predict
 import json
 import numpy as np
+from utils.GradePrediction import get_prediction
 
 
 # @TODO: change to IKI environment (UvA)
@@ -24,6 +25,10 @@ def current_scores(course):
         if enr.type == 'StudentEnrollment':
             course_grades[enr.user_id] = enr.grades['current_score']
     return course_grades
+
+def get_user_scores(course, userid):
+    grades = []
+    return current_scores(course)[userid]
 
 
 def frequency_count(gradedict, student_id, nr_bins=10, minn=0.0, maxx=100.0):
@@ -88,9 +93,13 @@ def get_data(user):
     # Calculate and save data for Gauss plot
     grade = current_score[student_id]
     # weights = {'W1WG2':.1, 'W2WG2':.1, 'W3WG1':.1, 'W5WG1':.1, 'W6WG1':.1, 'W7WG1':.1, 'P1':.1, 'P2':.1, 'SAM':.1, 'POS':.1, 'DT1':.25, 'DT2':.25}
-    # @TODO: dynamically set completion
     completion = .7
-    gaussdata = {"weighted_grade": current_score[student_id]/10, "completion": completion, "sigma": get_sigma(completion)}
+    # gaussdata = {"weighted_grade": current_score[student_id]/10, "completion": completion, "sigma": get_sigma(completion)}
+
+    dummy_scores = [7.,  7.,  5., 7., 6.5]
+    est_var, est_grade = get_prediction(dummy_scores)
+    # est_var, est_grade = get_prediction(current_scores[student_id])
+    gaussdata = {"weighted_grade": est_grade, "sigma": est_var}
 
     return {"bardata": bardata, "gaussdata": gaussdata, "student_name": student_name}
 
