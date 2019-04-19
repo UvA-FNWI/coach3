@@ -2,9 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="74b2c62e-52d1-4d04-bdc8-504228346202" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/utils/GradePrediction.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/bayesian.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/30bec28f-5512-4dc9-9f7a-551cf913aaca.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/30bec28f-5512-4dc9-9f7a-551cf913aaca.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/canvas_lti/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/canvas_lti/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iki/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iki/migrations/0002_auto_20190315_1444.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iki/migrations/0003_auto_20190315_1444.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iki/migrations/0004_auto_20190318_1133.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iki/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iki_lti/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki_lti/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/CanvasHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/CanvasHelper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/GradePrediction.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/GradePrediction.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,31 +32,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/iki_lti/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="45" selection-start-column="45" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/GradePrediction.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="838">
-              <caret line="268" column="19" selection-start-line="268" selection-start-column="19" selection-end-line="268" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utils/CanvasHelper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="575">
-              <caret line="100" column="68" selection-start-line="100" selection-start-column="68" selection-end-line="100" selection-end-column="68" />
+            <state relative-caret-position="2380">
+              <caret line="140" column="17" selection-start-line="140" selection-start-column="17" selection-end-line="140" selection-end-column="17" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -53,35 +44,67 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/course.py">
+        <entry file="file://$PROJECT_DIR$/iki/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="82">
-              <caret line="272" column="30" lean-forward="true" selection-start-line="272" selection-start-column="30" selection-end-line="272" selection-end-column="30" />
+            <state relative-caret-position="428">
+              <caret line="47" column="91" selection-start-line="47" selection-start-column="91" selection-end-line="47" selection-end-column="91" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/canvas.py">
+        <entry file="file://$PROJECT_DIR$/utils/dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-18470">
-              <caret line="21" column="6" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
+            <state relative-caret-position="68">
+              <caret line="4" column="15" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
+        <entry file="file://$PROJECT_DIR$/iki_lti/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="608">
+              <caret line="71" selection-start-line="71" selection-end-line="71" />
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/requirements.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3281">
+              <caret line="193" column="24" selection-start-line="193" selection-start-column="24" selection-end-line="193" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/iki/__init__.py">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/canvas_lti/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1479">
-              <caret line="87" column="1" selection-start-line="87" selection-start-column="1" selection-end-line="87" selection-end-column="1" />
+            <state relative-caret-position="317">
+              <caret line="171" column="13" lean-forward="true" selection-start-line="171" selection-start-column="13" selection-end-line="171" selection-end-column="13" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/canvas_lti/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -97,9 +120,22 @@
     <findStrings>
       <find>CSRF</find>
       <find>get_sigma</find>
-      <find>weights</find>
       <find>weights: List[float],z</find>
+      <find>subm</find>
+      <find>course</find>
+      <find>enrol</find>
+      <find>assignme</find>
+      <find>get_en</find>
+      <find>list_a</find>
+      <find>assignment</find>
+      <find>list_su</find>
+      <find>get_ass</find>
+      <find>weights</find>
+      <find>estimate_residual</find>
+      <find>calculate_score</find>
       <find>current_scores</find>
+      <find>print</find>
+      <find>redis</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -111,15 +147,24 @@
         <option value="$PROJECT_DIR$/iki_lti/lti_launch.py" />
         <option value="$PROJECT_DIR$/../Goal-setting pilot/Analysis/DataAnalysis.py" />
         <option value="$PROJECT_DIR$/iki/views.py" />
-        <option value="$PROJECT_DIR$/canvas_lti/settings.py" />
         <option value="$PROJECT_DIR$/utils/Grade_prediction.py" />
-        <option value="$PROJECT_DIR$/iki_lti/views.py" />
+        <option value="$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/course.py" />
         <option value="$PROJECT_DIR$/utils/GradePrediction.py" />
+        <option value="$PROJECT_DIR$/utils/bayesian.py" />
+        <option value="$PROJECT_DIR$/iki_lti/views.py" />
+        <option value="$PROJECT_DIR$/utils/dataset.py" />
+        <option value="$PROJECT_DIR$/iki/models.py" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/iki/celery.py" />
         <option value="$PROJECT_DIR$/utils/CanvasHelper.py" />
+        <option value="$PROJECT_DIR$/iki/task.py" />
+        <option value="$PROJECT_DIR$/canvas_lti/celery.py" />
+        <option value="$PROJECT_DIR$/canvas_lti/__init__.py" />
+        <option value="$PROJECT_DIR$/canvas_lti/settings.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="877" />
@@ -129,6 +174,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -146,41 +192,17 @@
               <item name="coach3" type="462c0819:PsiDirectoryNode" />
               <item name="iki" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="coach3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coach3" type="462c0819:PsiDirectoryNode" />
-              <item name="iki" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coach3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coach3" type="462c0819:PsiDirectoryNode" />
-              <item name="iki" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="iki" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coach3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coach3" type="462c0819:PsiDirectoryNode" />
-              <item name="iki_lti" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coach3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coach3" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -245,17 +267,20 @@
       <workItem from="1553857044566" duration="1100000" />
       <workItem from="1553863515259" duration="1257000" />
       <workItem from="1554367661756" duration="3600000" />
+      <workItem from="1554894778038" duration="16340000" />
+      <workItem from="1555486667708" duration="118000" />
+      <workItem from="1555576455773" duration="12238000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18284000" />
+    <option name="totallyTimeSpent" value="58813000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15808298" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15236051" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -268,7 +293,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32970297" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.38019803" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32970297" />
+      <window_info anchor="bottom" id="Python Console" order="10" visible="true" weight="0.23373494" />
       <window_info anchor="bottom" id="manage.py@coach3" order="11" weight="0.32871288" />
       <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
@@ -345,9 +370,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/iki/models.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/iki_lti/factory.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -370,69 +392,201 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/iki/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="11" lean-forward="true" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/Grade_prediction.py" />
-    <entry file="file://$PROJECT_DIR$/canvas_lti/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
-          <caret line="87" column="1" selection-start-line="87" selection-start-column="1" selection-end-line="87" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/iki_lti/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="45" selection-start-column="45" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/canvas.py">
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/util.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18470">
-          <caret line="21" column="6" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
+        <state relative-caret-position="-439">
+          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/course.py">
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/submission.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="272" column="30" lean-forward="true" selection-start-line="272" selection-start-column="30" selection-end-line="272" selection-end-column="30" />
+        <state relative-caret-position="-907">
+          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/canvas_object.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/requester.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1802">
+          <caret line="114" column="8" selection-start-line="114" selection-start-column="8" selection-end-line="114" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///anaconda3/lib/python3.7/site-packages/canvasapi/user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3672">
+          <caret line="227" column="48" selection-start-line="227" selection-start-column="48" selection-end-line="227" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///anaconda3/lib/python3.7/site-packages/canvasapi/assignment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1156">
+          <caret line="78" column="63" selection-start-line="78" selection-start-column="63" selection-end-line="78" selection-end-column="63" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/GradePrediction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="838">
-          <caret line="268" column="19" selection-start-line="268" selection-start-column="19" selection-end-line="268" selection-end-column="19" />
+        <state relative-caret-position="4029">
+          <caret line="241" column="62" selection-start-line="241" selection-start-column="16" selection-end-line="241" selection-end-column="62" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/CanvasHelper.py">
+    <entry file="file://$PROJECT_DIR$/utils/bayesian.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="100" column="68" selection-start-line="100" selection-start-column="68" selection-end-line="100" selection-end-column="68" />
+        <state relative-caret-position="119">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/canvas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2125">
+          <caret line="140" column="8" selection-start-line="140" selection-start-column="8" selection-end-line="140" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/sklearn/linear_model/bayes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4199">
+          <caret line="260" column="8" selection-start-line="260" selection-start-column="8" selection-end-line="260" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/course.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1768">
+          <caret line="123" column="37" selection-start-line="123" selection-start-column="37" selection-end-line="123" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/canvasapi/assignment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1241">
+          <caret line="85" column="39" selection-start-line="85" selection-start-column="39" selection-end-line="85" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="46" column="83" selection-start-line="46" selection-start-column="83" selection-end-line="46" selection-end-column="83" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki_lti/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/django/db/models/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-90">
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki/migrations/0002_auto_20190418_1241.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki/migrations/0001_initial.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/django_mysql/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/coach3/lib/python3.7/site-packages/django/db/models/fields/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18806">
+          <caret line="1641" column="8" selection-start-line="1641" selection-start-column="8" selection-end-line="1641" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="15" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="47" column="91" selection-start-line="47" selection-start-column="91" selection-end-line="47" selection-end-column="91" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3281">
+          <caret line="193" column="24" selection-start-line="193" selection-start-column="24" selection-end-line="193" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/CanvasHelper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2380">
+          <caret line="140" column="17" selection-start-line="140" selection-start-column="17" selection-end-line="140" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki/celery.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/canvas_lti/celery.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iki/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/canvas_lti/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/canvas_lti/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="171" column="13" lean-forward="true" selection-start-line="171" selection-start-column="13" selection-end-line="171" selection-end-column="13" />
         </state>
       </provider>
     </entry>

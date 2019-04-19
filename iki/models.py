@@ -1,4 +1,6 @@
 from django.db import models
+from django_mysql.models import ListTextField
+import pandas as pd
 
 # Create your models here.
 
@@ -20,6 +22,7 @@ class User(models.Model):
     - name: full name of the user
     - email: email of the user.
     - lti_id: the DLO id of the user.
+    - iki_user_id: The id of the user for the course
     """
 
     name = models.CharField(null=False, max_length=200)
@@ -28,10 +31,21 @@ class User(models.Model):
 
     lti_id = models.CharField(null=True, unique=True, blank=True, max_length=200)
 
-    iki_user_id = models.IntegerField(null=True, unique=True, blank=True, max_length=200)
-
+    iki_user_id = models.IntegerField(null=True, unique=True, blank=True)
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    av_grade = models.FloatField(null=True)
+
+    grades = ListTextField(base_field=models.IntegerField(), null=True)
+
+    grade_pred = models.FloatField(null=True)
+
+    grade_sigma = models.FloatField(null=True)
+
+    assessments = models.IntegerField(null=True)
+
+    comparison_group = models.TextField(null=True, unique=True, blank=True, max_length=200)
 
     # To Add: average_grade, predicted_average_grade, is_promotion_focused
 
@@ -56,6 +70,10 @@ class User(models.Model):
             lti_id=request['user_id'],
             iki_user_id=request['custom_canvas_user_id'],
             course=Course.objects.create(iki_course_id=course_id),
+            av_grade=0,
+            grade_pred=0,
+            grade_sigma=0,
+            assessments = 0
             )
         user.save()
 

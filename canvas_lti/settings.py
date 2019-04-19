@@ -163,7 +163,7 @@ BASELINK = 'http://localhost:8080'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Amsterdam'
 
 USE_I18N = True
 
@@ -177,3 +177,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 #LOGIN_REDIRECT_URL = 'index'
+
+

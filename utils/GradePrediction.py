@@ -7,7 +7,8 @@ import pprint
 
 conf_int = 10
 q = 0.1
-bigK = 12
+bigK = 11
+weights = [5/108, 5/108, 5/108, 5/108, 1/4, 5/108, 5/108, 5/108, 5/108, 1/6, 1/4]
 
 
 class Neighbor:
@@ -23,12 +24,11 @@ class Neighborhood:
 
 
 #  formula (17)
-def vector_distance(student1: List[float], student2: List[float], weights: List[float]) -> float:
+def vector_distance(student1: List[float], student2: List[float], weights) -> float:
     """
     Assesses the distance between two students
     :param student1: feature vector of the target student
     :param student2: feature vector of the peer student
-    :param weights: weight vector corresponding to the assessments of the feature vectors
     :return: the distance between the two students as formulated in (17)
     """
 
@@ -45,12 +45,11 @@ def vector_distance(student1: List[float], student2: List[float], weights: List[
     return upper/lower
 
 
-def make_neighborhoods(student: List[float], group, weights, k):
+def make_neighborhoods(student: List[float], group, k):
     """
 
     :param student: feature_vector of the target student
     :param group: list of the feature vectors of students from previous years
-    :param weights: weights of each element of the feature vector
     :return: a list of Neighborhood objects
     """
     neighborhoods = []
@@ -85,11 +84,10 @@ def make_neighborhoods(student: List[float], group, weights, k):
 
 
 # formula (1)
-def calculate_score(assessments: List[float], weights: List[float]) -> float:
+def calculate_score(assessments: List[float]) -> float:
     """
     calculates the overall or residual score of a student based on their number of assessments and their weights
     :param assessments: an array of the score of all assessments
-    :param weights: an array of the weights corresponding to each assessment
     :return: the score of the student
     """
     score = 0
@@ -99,36 +97,34 @@ def calculate_score(assessments: List[float], weights: List[float]) -> float:
 
 
 # formula (5)
-def estimate_residual(neighborhood: Neighborhood, weights: List[float], k: int) -> float:
+def estimate_residual(neighborhood: Neighborhood, k: int) -> float:
     """
     Estimates the residual of a neighborhood
     :param neighborhood: list of instances of Neighbor
-    :param weights: the weights of the assessments
     :param k: current assessment time
     :return: the residual as formulated in (5)
     """
     upper = 0
     lower = len(neighborhood.neighbors)
     for neighbor in neighborhood.neighbors:
-        upper += calculate_score(neighbor.feat_vector[k:], weights[k:])
+        upper += calculate_score(neighbor.feat_vector[k:])
 
     return upper/lower
 
 
 # formula (7)
-def estimate_var(neighborhood: Neighborhood, weights: List[float], k: int) -> float:
+def estimate_var(neighborhood: Neighborhood, k: int) -> float:
     """
     Estimates the variance of a neighborhood
     :param neighborhood: list of instances of Neighbor
-    :param weights: the weights of the assessments
     :param k: current assessment time
     :return: the variance of the neighborhood as formulated in (7)
     """
     upper = 0
     lower = len(neighborhood.neighbors) - 1
-    est_residual = estimate_residual(neighborhood, weights, k)
+    est_residual = estimate_residual(neighborhood, k)
     for neighbor in neighborhood.neighbors:
-        residual = calculate_score(neighbor.feat_vector[k:], weights)
+        residual = calculate_score(neighbor.feat_vector[k:])
         upper += math.pow(residual - est_residual, 2)
 
     return upper/lower
@@ -169,16 +165,15 @@ def is_confidence_ok(pred_conf: float) -> bool:
     return pred_conf >= q
 
 
-def compute_est_final(assessments: List[float], weights: List[float], est_residual: float, k: int) -> float:
+def compute_est_final(assessments: List[float], est_residual: float, k: int) -> float:
     """
     Estimates the final grade of the target student
     :param assessments: a list of all the assessment grades up until now (i.e. k)
-    :param weights: the weight for all the assessments
     :param est_residual: the estimated residual for the target student
     :param k: the current assessment time
     :return: the estimated final grade
     """
-    return calculate_score(assessments[:k], weights) + est_residual
+    return calculate_score(assessments[:k]) + est_residual
 
 
 
@@ -199,6 +194,9 @@ def standardize_scores(scores):
 data2018 = pd.read_csv("grades2018.csv")
 data2017 = pd.read_csv("grades2017.csv")
 
+# convert the dataframe into an array and remove the id column and final grade column
+data_val2018 = data2018.values[:, :-1]
+data_val2017 = data2017.values[:, 1:-1]
 # convert the dataframe into an array and remove the id column and final grade column
 data_val2018 = data2018.values[:, :-1]
 data_val2017 = data2017.values[:, 1:-1]
@@ -240,23 +238,8 @@ for i, col in enumerate(test_data.T):
     st_test_data.append(standardize_scores(col))
 st_test_data = np.array(st_test_data).T
 
-
-
-
-
 train_data = np.append(data_val2018, data_val2017, 0)
 st_train_data = np.append(st_data_val2018, st_data_val2017, 0)
-
-
-weights = [10/288, 10/288, 10/288, 1/32, 1/8, 1/4, 10/288, 10/288, 10/288, 1/32, 1/8,  1/4]
-
-# for i, student in enumerate(test_data):
-#     print('\nprediction for student', int(test_ids[i]), 'at')
-#     for k in range(0, bigK):
-#         print('assessment', k+1, ':', end='\t')
-#         var, prediction = get_prediction(student, train_data, weights, k, sd, mean)
-#         print('prediction:', prediction, '\tvar:', var)
-#         print("student's grades so far:", test_data[i, :k+1])
 
 
 def get_prediction(student: List[float]) -> (float, float):
@@ -270,16 +253,16 @@ def get_prediction(student: List[float]) -> (float, float):
 
     k = len(student)
     if k == bigK:
-        return 0, calculate_score(student, weights)
-    neighborhoods = make_neighborhoods(student, train_data, weights, k)
+        return 0, calculate_score(student)
+    neighborhoods = make_neighborhoods(student, train_data, k)
     for neighborhood in neighborhoods:
-        neighborhood.est_res = estimate_residual(neighborhood, weights, k)
-        neighborhood.est_var = estimate_var(neighborhood, weights, k)
+        neighborhood.est_res = estimate_residual(neighborhood, k)
+        neighborhood.est_var = estimate_var(neighborhood, k)
         neighborhood.q = prediction_confidence(neighborhood.est_var)
     candidate = find_w_largest_pred_conf(neighborhoods)
 
     if is_confidence_ok(candidate.q):
-        return candidate.est_var, compute_est_final(student, weights, candidate.est_res, k)
+        return candidate.est_var, compute_est_final(student, candidate.est_res, k)
     else:
         return 0, 0
 
