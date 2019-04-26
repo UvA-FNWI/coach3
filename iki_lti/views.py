@@ -66,6 +66,9 @@ def lti_launch(request):
         return redirect("iki:index", user_id=user.iki_user_id)
     else:
         user = User.create_user(params)
+        print('launch student id')
+        print(type(user.iki_user_id))
+    # return redirect("iki:index", user_id=user.iki_user_id)
     return redirect("iki:index", user_id=user.iki_user_id)
 
 

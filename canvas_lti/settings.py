@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django_extensions',
     'django.contrib.staticfiles',
+    'background_task',
     #'django_auth_lti',
     #'django_app_lti',
 
@@ -178,4 +179,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 #LOGIN_REDIRECT_URL = 'index'
 
+#Background processes
+BACKGROUND_TASK_RUN_ASYNC = True
 

@@ -35,17 +35,21 @@ class User(models.Model):
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    av_grade = models.FloatField(null=True)
+    av_grade = models.FloatField(default=0)
 
     grades = ListTextField(base_field=models.IntegerField(), null=True)
 
-    grade_pred = models.FloatField(null=True)
+    grade_pred = models.FloatField(default=0)
 
-    grade_sigma = models.FloatField(null=True)
+    grade_sigma = models.FloatField(default=0)
 
-    assessments = models.IntegerField(null=True)
+    assessments = models.IntegerField(default=0)
 
     comparison_group = models.TextField(null=True, unique=True, blank=True, max_length=200)
+
+    goal_grade = models.IntegerField(default=0, unique=True)
+
+    has_comparison_group = models.BooleanField(unique=True, default=False)
 
     # To Add: average_grade, predicted_average_grade, is_promotion_focused
 
@@ -69,11 +73,7 @@ class User(models.Model):
             email=request['lis_person_contact_email_primary'],
             lti_id=request['user_id'],
             iki_user_id=request['custom_canvas_user_id'],
-            course=Course.objects.create(iki_course_id=course_id),
-            av_grade=0,
-            grade_pred=0,
-            grade_sigma=0,
-            assessments = 0
+            course=Course.objects.create(iki_course_id=course_id)
             )
         user.save()
 

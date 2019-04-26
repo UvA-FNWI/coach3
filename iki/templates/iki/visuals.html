@@ -32,12 +32,12 @@
 // receive relevant data from Django
 var received_data  = JSON.parse('{{ data | safe }}');
 
-var margin = {top: 20, right: 55, bottom: 60, left: 50},
+var margin = {top: 30, right: 55, bottom: 50, left: 50},
     width = 400 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
 function get_name(){
-  name = received_data.student_name
+  var name = received_data.student_name
   document.write("Hello student ",name);
 }
 
@@ -47,23 +47,54 @@ function display_bar(){
     var assignment = data[data.length-1]
     data.splice(-1,1)
 
+    {#// Check if data has not only 0 value when assignment is non zero#}
+    {#if (assignment.assignment!=0){#}
+    {#    var group_sizes = data.map(function(d) {return d.size}).reduce(function(a,b) {return a+b;},0);#}
+    {#    if(group_sizes == 0){#}
+    {#        var goal_grade = prompt("No set of peer students have been found for your goal grade.\n" +#}
+    {#            "Please update your goal grade:", "My goal grade")#}
+    {#    }#}
+    {#}#}
+    {##}
+    {#var goal_grade = prompt("No set of peer students have been found for your goal grade.\n" +#}
+    {#            "Please update your goal grade:", "My goal grade")#}
+
+    {#if(goal_grade != null){#}
+    {#    document.getElementById("demo").innerHTML =#}
+    {##}
+    {#}#}
+
     // Get total number of students
     var total = 0
     data.forEach(function(d){
       total += d.size
     });
 
-    // Normalize data
+    var max = 0
+    data.forEach(function (d) {
+        if (d.size > max){
+            max = d.size
+        }
+    });
+
+
+    {% comment %}// Normalize data
+    data.forEach(function(d){
+      d.size = d.size/max
+    });{% endcomment %}
+
+    {% comment %}// Normalize data
     data.forEach(function(d){
       d.size = d.size/total
     });
-
+{% endcomment %}
     // Set ranges
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
         y = d3.scaleLinear().rangeRound([height, 0]);
 
     x.domain(data.map(function(d) { return d.bucket; }));
-    y.domain([0,1]);
+    {#x.domain([0,1,2,3,4,5,6,7,8,9,10]);#}
+    y.domain([0,max]);
 
     var svg_Bar = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -75,9 +106,9 @@ function display_bar(){
       .attr("x", (width / 2))
       .attr("y", 0 - (margin.top / 2))
       .attr("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("text-decoration", "underline")
-      .text("Gemiddeld cijfer");
+      .style("font-size", "15px")
+      .style("font-weight", 700)
+      .text("Jij vs. studenten met gelijke goelen");
 
     // X axis label
     svg_Bar.append("text")
@@ -94,7 +125,7 @@ function display_bar(){
       .attr("transform", "rotate(-90)")
       .attr("x", 3)
       .attr("y", -40)
-      .text("Percentage studenten");
+      .text("Aantal studenten");
 
     var g = svg_Bar.append("g")
         // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -103,12 +134,12 @@ function display_bar(){
     svg_Bar.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(10));
 
     // Y axis
     g.append("g")
         .attr("class", "axis axis--y")
-        .call(d3.axisLeft(y).ticks(10, "%"))
+        .call(d3.axisLeft(y).ticks(max))
       .append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
@@ -116,22 +147,31 @@ function display_bar(){
         .attr("text-anchor", "end")
         .text("size");
 
-    // Bars
+    // Bars of other students
     g.selectAll(".bar")
       .data(data)
       .enter().append("rect")
         .attr("class", "bar")
         .attr("border", 10)
-        .style("stroke", function(d){
-          if (d.bucket == assignment.assignment) { return "black" }
-          else { return "#CCE0F4" } })
-        .attr("fill", function(d) {
-          if (d.bucket == assignment.assignment) { return "#FBCFA0" }
-          else { return "#CCE0F4" } })
+        .style("stroke","#CCE0F4")
+        .attr("fill", "#CCE0F4")
         .attr("x", function(d) { return x(d.bucket); })
         .attr("y", function(d) { return y(d.size); })
         .attr("width", x.bandwidth())
         .attr("height", function(d) { return height - y(d.size); });
+
+    // Bar of user
+    g.selectAll(".assignment")
+      .data(data)
+      .enter().append("rect")
+        .attr("class", "bar")
+        .attr("border", 10)
+        .style("stroke","#FBCFA0")
+        .attr("fill", "#FBCFA0")
+        .attr("x", function(d) { return x(assignment.assignment); })
+        .attr("y", function(d) { return y(1); })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return height-y(1); });
 }
 
 function display_Gaussian() {
@@ -202,8 +242,8 @@ function display_Gaussian() {
     .attr("x", (width / 2))
     .attr("y", 0 - (margin.top / 2))
     .attr("text-anchor", "middle")
-    .style("font-size", "12px")
-    .style("text-decoration", "underline")
+    .style("font-size", "15px")
+    .style("font-weight", 700)
     .text("Voorspeld eindcijfer");
 
   svg_Gauss.append("g")
@@ -277,9 +317,33 @@ function gaussian(x, mean, sigma) {
 
 display_bar()
 display_Gaussian()
-get_name()
+{#get_name()#}
 
 </script>
+<body>
+
+<br>
+
+
+{%  if not has_comparison_group %}
+<form name = "form" action = "{% url "iki:new_goal" student_id%}"
+         method = "POST" >{% csrf_token %}
+    <input type="text", name="new_goal_grade">
+    <button type="submit", value="new_grade">Set my new goal grade</button>
+</form>
+    {% if messages %}
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+{%  endif %}
+{% endif %}
+
+
+
+
+
+</body>
+
 
 
 </html>
