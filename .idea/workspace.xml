@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="74b2c62e-52d1-4d04-bdc8-504228346202" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/canvas_lti/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/canvas_lti/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/factory.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iki/templates/iki/visuals.html" beforeDir="false" afterPath="$PROJECT_DIR$/iki/templates/iki/visuals.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki_lti/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki_lti/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki_lti/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki_lti/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/CanvasHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/CanvasHelper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/ComparisonGroupFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/ComparisonGroupFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/dataset.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -94,8 +81,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="163" column="22" lean-forward="true" selection-start-line="163" selection-start-column="22" selection-end-line="163" selection-end-column="22" />
+            <state relative-caret-position="367">
+              <caret line="265" lean-forward="true" selection-start-line="265" selection-end-line="265" />
             </state>
           </provider>
         </entry>
@@ -397,12 +384,12 @@
       <workItem from="1554894778038" duration="16340000" />
       <workItem from="1555486667708" duration="118000" />
       <workItem from="1555576455773" duration="69861000" />
-      <workItem from="1556562108094" duration="47386000" />
+      <workItem from="1556562108094" duration="47596000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="163822000" />
+    <option name="totallyTimeSpent" value="164032000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -797,8 +784,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="163" column="22" lean-forward="true" selection-start-line="163" selection-start-column="22" selection-end-line="163" selection-end-column="22" />
+        <state relative-caret-position="367">
+          <caret line="265" lean-forward="true" selection-start-line="265" selection-end-line="265" />
         </state>
       </provider>
     </entry>

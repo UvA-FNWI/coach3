@@ -148,11 +148,11 @@ function display_bar(){
     {#              return d[2];#}
     {#            }))]);#}
     {##}
-    {#var line2 = d3.line()#}
-    {#  .x(function(d, i) { return xScale(d[0]) + xScale.bandwidth() / 2; })#}
-    {#  .y(function(d) { return yScale(d[1]); })#}
-    {#  .curve(d3.curveMonotoneX);#}
-    {##}
+    var line2 = d3.line()
+      .x(function(d, i) { return xScale(d[0]) + xScale.bandwidth() / 2; })
+      .y(function(d) { return yScale(d[1]); })
+      .curve(d3.curveMonotoneX);
+
     {#var line3 = d3.line()#}
     {#  .x(function(d, i) { return xScale(d.q) + xScale.bandwidth() / 2; })#}
     {#  .y(function(d) { return yScale(d.p); })#}
@@ -260,9 +260,9 @@ function display_bar(){
         .attr("height", function(d) { return height-y(1); });
 
     bar1.append("path")
-      .datum(comparison_curve)
       .attr("class", "line")
-      .attr("d", line_a);
+      .attr("d", line_a(comparison_curve));
+    {#.attr("d", line2(dataset));#}
 
 
 }
