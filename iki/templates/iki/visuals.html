@@ -21,6 +21,10 @@
         stroke: steelblue;
         stroke-width: 1.5px;
     }
+    p.error_message{
+        font-size: 12px;
+        color: red;
+    }
     </style>
 
 </head>
@@ -323,9 +327,13 @@ display_Gaussian()
 <body>
 
 <br>
+<br>
 
 
 {%  if not has_comparison_group %}
+    <p class="error_message">No selection could be made for the goal grade you set.<br>
+    This is most likely due to the fact that the goal grade you
+        have set is unrealistic. <br> Please set a new goal grade.</p>
 <form name = "form" action = "{% url "iki:new_goal" student_id%}"
          method = "POST" >{% csrf_token %}
     <input type="text", name="new_goal_grade">

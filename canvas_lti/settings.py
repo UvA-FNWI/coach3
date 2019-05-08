@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.staticfiles',
     'background_task',
-    #'django_auth_lti',
+    'simple_history',
+    'reversion',
+    # 'django_auth_lti',
     #'django_app_lti',
 
 ]
@@ -54,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
+    'reversion.middleware.RevisionMiddleware',
     # 'django_auth_lti.middleware.LTIAuthMiddleware',
 ]
 
@@ -181,4 +185,6 @@ STATIC_URL = '/static/'
 
 #Background processes
 BACKGROUND_TASK_RUN_ASYNC = True
+MAX_ATTEMPTS = 5
+
 

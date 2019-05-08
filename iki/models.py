@@ -1,5 +1,7 @@
 from django.db import models
-from django_mysql.models import ListTextField
+from simple_history.models import HistoricalRecords
+from django_mysql.models import JSONField
+# from django_mysql.models import ListTextField
 import pandas as pd
 
 # Create your models here.
@@ -37,7 +39,7 @@ class User(models.Model):
 
     av_grade = models.FloatField(default=0)
 
-    grades = ListTextField(base_field=models.IntegerField(), null=True)
+    # grades = ListTextField(base_field=models.IntegerField(), null=True)
 
     grade_pred = models.FloatField(default=0)
 
@@ -45,11 +47,23 @@ class User(models.Model):
 
     assessments = models.IntegerField(default=0)
 
-    comparison_group = models.TextField(null=True, unique=True, blank=True, max_length=200)
+    comparison_group = models.TextField(max_length=600)
 
-    goal_grade = models.IntegerField(default=0, unique=True)
+    # comparson_group = JSONField()
 
-    has_comparison_group = models.BooleanField(unique=True, default=False)
+    goal_grade = models.FloatField(default=0.0)
+
+    has_comparison_group = models.BooleanField(default=False)
+
+    comparison_distance_mean = models.FloatField(default=0.0)
+
+    comparison_mean = models.FloatField(default=0.0)
+
+    comparison_std = models.FloatField(default=0.0)
+
+    is_edge_case = models.BooleanField(default=False)
+
+    history = HistoricalRecords()
 
     # To Add: average_grade, predicted_average_grade, is_promotion_focused
 
@@ -73,7 +87,7 @@ class User(models.Model):
             email=request['lis_person_contact_email_primary'],
             lti_id=request['user_id'],
             iki_user_id=request['custom_canvas_user_id'],
-            course=Course.objects.create(iki_course_id=course_id)
+            course=Course.objects.create(iki_course_id=course_id),
             )
         user.save()
 

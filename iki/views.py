@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.template import Context, loader
 from django.shortcuts import render, redirect
-from utils.CanvasHelper import get_data, given_consent, set_goal_grade
+from utils.CanvasHelper import get_data, given_consent, do_update_db
+from utils.ComparisonGroupFactory import set_goal_grade
 import json
 from iki.forms import GoalResetForm
 from django.contrib import messages
@@ -32,8 +33,6 @@ def index(request, user_id):
     # @TODO: use this student id for visual (i.e. sent to .html)
 
     student_id = user_id
-    print("the student id:", student_id)
-    print(type(student_id))
 
     students = User.objects.filter(iki_user_id=student_id)
     if students.count() > 0:
@@ -42,7 +41,7 @@ def index(request, user_id):
         raise ValueError("There is no student for the given user id")
 
     comparison_group = student.comparison_group
-    has_comparison_group = False
+    has_comparison_group = student.has_comparison_group
 
     # See whether student has given consent
     #consent = given_consent(student)
@@ -72,9 +71,13 @@ def new_goal(request, student_id):
         if form_data.is_valid():
             new_goal_grade = form_data.cleaned_data["new_goal_grade"]
             print("new goal grade:", new_goal_grade)
+
+            user.goal_grade = float(new_goal_grade)
+            user.save()
+            do_update_db(student_id)
+            # set_goal_grade(new_goal_grade, student_id)
         else:
             print("post data not valid")
-            print(form_data.errors)
             messages.add_message(request, messages.ERROR, 'Please enter a valid goal grade')
     # set_goal_grade()
 

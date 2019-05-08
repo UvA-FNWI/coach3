@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
+from utils.CanvasHelper import general_db_update
 
 #import django_app_lti.urls
 import iki_lti.urls
@@ -30,3 +31,5 @@ urlpatterns = [
      # #path('accounts/login/', include(django_app_lti.urls))
      # path('accounts/', include('django.contrib.auth.urls')),
 ]
+
+general_db_update(repeat=60*60)

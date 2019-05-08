@@ -1,8 +1,16 @@
 from django.contrib import admin
-from iki.models import User
+from iki.models import User, Course
 import os
 
-admin.site.register(User)
+from reversion.admin import VersionAdmin
+
+@admin.register(User)
+class YourModelAdmin(VersionAdmin):
+
+    pass
+# admin.site.register(User)
+admin.site.register(Course)
+# admin.site.register(SimpleHistoryAdmin)
 
 def delete_model(modeladmin, request, queryset):
     for obj in queryset:

@@ -13,6 +13,7 @@ from django.views.generic import View
 import urllib.request, urllib.parse, urllib.error
 from django.http import HttpResponse, HttpResponseRedirect
 # from braces.views import CsrfExemptMixin
+from rest_framework.decorators import api_view
 
 
 
@@ -38,6 +39,7 @@ class LTI_STATES(enum.Enum):
 
 
 @csrf_exempt
+# @api_view(['POST'])
 def lti_launch(request):
     """Django view for the lti post request.
 
