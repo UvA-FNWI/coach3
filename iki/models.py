@@ -1,8 +1,5 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
-from django_mysql.models import JSONField
-# from django_mysql.models import ListTextField
-import pandas as pd
 
 # Create your models here.
 

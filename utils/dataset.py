@@ -24,6 +24,25 @@ def create_training_set(n_assessments):
 
     return train_data, train_grades
 
+def current_grade(course):
+    assignments = course.get_assignments()
+    users = course.get_users(enrollment_type='student')
+    weighted_grade = {}
+
+    for student in users:
+        total_weight = 0
+        grade = 0
+        for assignment in assignments:
+            if assignment.grading_type == 'gpa_scale' and assignment.get_submission(student).grade:
+                assignment_id = assignment.assignment_group_id
+                weight = float(course.get_assignment_group(assignment_id).group_weight)
+                total_weight += weight
+                grade += float(assignment.get_submission(student).grade)*weight
+        if total_weight > 0:
+            weighted_grade[student.id] = grade/total_weight
+    print(weighted_grade)
+    return weighted_grade
+
 
 def get_av_goal_data(user: User) -> pd.DataFrame:
     course_id = user.course.iki_course_id
@@ -43,7 +62,12 @@ def get_av_goal_data(user: User) -> pd.DataFrame:
     # use dummy data for test phase
     return get_dummy_data()
 
+def get_av_goal_data_true(user: User) -> pd.DataFrame:
+    return
+
 def get_dummy_data():
     goal_data = pd.read_csv('goal_grade.csv')
     print(goal_data)
     return goal_data
+
+

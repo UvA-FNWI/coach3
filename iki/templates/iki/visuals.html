@@ -33,6 +33,36 @@
 </body>
 <script type="text/javascript">
 
+var dataset = [
+    ['札幌',703, 1902],
+    ['清水',1473,3341],
+    ['松本',863,1935],
+    ['Ｃ大阪',1494,3008],
+    ['京都',965,1743],
+    ['岡山',568,1271],
+    ['町田',189, 626],
+    ['横浜ＦＣ',464, 1064],
+    ['徳島',731, 1443],
+    ['愛媛',306, 630],
+    ['千葉',899, 2556],
+    ['山口',231, 880],
+    ['水戸',262, 589],
+    ['山形',429, 1497],
+    ['長崎',322, 749],
+    ['熊本',315, 720],
+    ['群馬',228, 522],
+    ['東京Ｖ',436, 1391],
+    ['讃岐',287, 613],
+    ['岐阜',419,932],
+    ['金沢',296,612],
+    ['北九州',343,855]
+  ];
+
+var norma = [ 1.7626123 ,  1.49828859,  0.27964945,  1.45344223, -1.00934951,
+        0.445325  ,  1.06075561, -1.11652082,  1.34952093, -0.88194799];
+
+
+
 // receive relevant data from Django
 var received_data  = JSON.parse('{{ data | safe }}');
 
@@ -41,15 +71,21 @@ var margin = {top: 30, right: 55, bottom: 50, left: 50},
     height = 300 - margin.top - margin.bottom;
 
 function get_name(){
-  var name = received_data.student_name
+  var name = received_data.student_name;
   document.write("Hello student ",name);
 }
 
 function display_bar(){
-    data = received_data.bardata
+    var data = received_data.bardata;
     // Get student group assignment
-    var assignment = data[data.length-1]
-    data.splice(-1,1)
+    var assignment = data[data.length-1];
+    data.splice(-1,1);
+    var params = received_data.gaussdata;
+    var mean1 = params.weighted_grade;
+    var sigma1 = params.sigma;
+
+    var comparison_curve = getData(mean1,sigma1);
+
 
     {#// Check if data has not only 0 value when assignment is non zero#}
     {#if (assignment.assignment!=0){#}
@@ -80,6 +116,9 @@ function display_bar(){
             max = d.size
         }
     });
+    max += 1;
+
+    {#var test = getData(5, 1);#}
 
 
     {% comment %}// Normalize data
@@ -96,26 +135,64 @@ function display_bar(){
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
         y = d3.scaleLinear().rangeRound([height, 0]);
 
+
+    {#var xScale = d3.scaleBand()#}
+    {#            .rangeRound([0, width])#}
+    {#            .padding(0.1)#}
+    {#            .domain(dataset.map(function(d) {#}
+    {#              return d[0];#}
+    {#            }));#}
+    {#  yScale = d3.scaleLinear()#}
+    {#            .rangeRound([height, 0])#}
+    {#            .domain([0, d3.max(dataset, (function (d) {#}
+    {#              return d[2];#}
+    {#            }))]);#}
+    {##}
+    {#var line2 = d3.line()#}
+    {#  .x(function(d, i) { return xScale(d[0]) + xScale.bandwidth() / 2; })#}
+    {#  .y(function(d) { return yScale(d[1]); })#}
+    {#  .curve(d3.curveMonotoneX);#}
+    {##}
+    {#var line3 = d3.line()#}
+    {#  .x(function(d, i) { return xScale(d.q) + xScale.bandwidth() / 2; })#}
+    {#  .y(function(d) { return yScale(d.p); })#}
+    {#  .curve(d3.curveMonotoneX);#}
+
+
     x.domain(data.map(function(d) { return d.bucket; }));
     {#x.domain([0,1,2,3,4,5,6,7,8,9,10]);#}
     y.domain([0,max]);
 
+    var line_a = d3.line()
+      .x(function(d) {
+          return x(d.q);
+      })
+      .y(function(d) {
+          return y(d.p);
+      });
+    window.alert(line_a(comparison_curve))
+
+
+
+
+
     var svg_Bar = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
+      .attr("height", height + margin.top + margin.bottom);
+
+    var g =  svg_Bar.append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    svg_Bar.append("text")
+    g.append("text")
       .attr("x", (width / 2))
       .attr("y", 0 - (margin.top / 2))
       .attr("text-anchor", "middle")
       .style("font-size", "15px")
       .style("font-weight", 700)
-      .text("Jij vs. studenten met gelijke goelen");
+      .text("Jij vs. studenten met gelijke doelen");
 
     // X axis label
-    svg_Bar.append("text")
+    g.append("text")
       .attr("class", "x label")
       .attr("text-anchor", "end")
       .attr("x", width)
@@ -123,7 +200,7 @@ function display_bar(){
       .text("Gemiddeld cijfer");
 
     // Y axis label
-    svg_Bar.append("text")
+    g.append("text")
       .attr("class", "y label")
       .attr("text-anchor", "end")
       .attr("transform", "rotate(-90)")
@@ -131,11 +208,11 @@ function display_bar(){
       .attr("y", -40)
       .text("Aantal studenten");
 
-    var g = svg_Bar.append("g")
-        // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    {#var g = svg_Bar.append("g")#}
+    {#    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");#}
 
     // X axis
-    svg_Bar.append("g")
+    g.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x).ticks(10));
@@ -152,33 +229,44 @@ function display_bar(){
         .text("size");
 
     // Bars of other students
-    g.selectAll(".bar")
-      .data(data)
-      .enter().append("rect")
+    var bar1 = g.selectAll("rect")
+        .data(data)
+        .enter().append("g");
+
+    bar1.append("rect")
         .attr("class", "bar")
         .attr("border", 10)
-        .style("stroke","#CCE0F4")
-        .attr("fill", "#CCE0F4")
-        .attr("x", function(d) { return x(d.bucket); })
+        .style("stroke","#2E86C1")
+        .attr("fill", "#5DADE2")
+        .attr("x", function(d) { return x(d.bucket)+1; })
         .attr("y", function(d) { return y(d.size); })
-        .attr("width", x.bandwidth())
+        .attr("width", x.bandwidth()-2)
         .attr("height", function(d) { return height - y(d.size); });
 
     // Bar of user
-    g.selectAll(".assignment")
-      .data(data)
-      .enter().append("rect")
+
+    var bar2 = g.selectAll("rect2")
+        .data(data)
+        .enter().append("g");
+
+    bar1.append("rect")
         .attr("class", "bar")
         .attr("border", 10)
-        .style("stroke","#FBCFA0")
-        .attr("fill", "#FBCFA0")
-        .attr("x", function(d) { return x(assignment.assignment); })
+        .style("stroke","#D68910")
+        .attr("fill", "#F5B041")
+        .attr("x", function(d) { return x(assignment.assignment)+2.5; })
         .attr("y", function(d) { return y(1); })
-        .attr("width", x.bandwidth())
+        .attr("width", x.bandwidth()-5)
         .attr("height", function(d) { return height-y(1); });
-}
 
-function display_Gaussian() {
+    bar1.append("path")
+      .datum(comparison_curve)
+      .attr("class", "line")
+      .attr("d", line_a);
+
+
+}
+function display_Gaussian(line) {
     params = received_data.gaussdata
     var mean = params.weighted_grade;
     var sigma = params.sigma
@@ -186,6 +274,7 @@ function display_Gaussian() {
     // var passProb = Number(normalcdf(mean, sigma, 5.5).toFixed(2))
 
   var data = getData(mean, sigma);
+
 
   var x = d3.scaleLinear()
       .range([0, width])
@@ -209,6 +298,8 @@ function display_Gaussian() {
       .y(function(d) {
           return y(d.p);
       });
+
+  {#window.alert(line(data))#}
 
   var svg_Gauss = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -268,19 +359,19 @@ function display_Gaussian() {
 function getData(mean, sigma) {
   // loop to populate data array with
   // probabily - quantile pairs
-  data = [];
+  var dataa = [];
   for (var i = 0; i < 100000; i++) {
-      q = normal(-2,12,1) // calc random draw from normal dist
-      p = gaussian(q, mean, sigma) // calc prob of rand draw
+      var q = normal(-2,12,1); // calc random draw from normal dist
+      var p = gaussian(q, mean, sigma); // calc prob of rand draw
 
       el = { "q": q, "p": p}
-      if (q < 10.0 && q > 0){ data.push(el) }
+      if (q < 10.0 && q > 0){ dataa.push(el) }
   };
   // Sort data for plotting
-  data.sort(function(x, y) {
+  dataa.sort(function(x, y) {
       return x.q - y.q;
   });
-  return data
+  return dataa
 }
 
 function normal(min, max, skew) {

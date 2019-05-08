@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.staticfiles',
     'background_task',
-    'simple_history',
     'reversion',
+    'rest_framework',
     # 'django_auth_lti',
     #'django_app_lti',
 

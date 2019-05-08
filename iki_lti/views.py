@@ -6,13 +6,11 @@ import enum
 
 from iki_lti import factory
 from iki.models import User
-from django.http import QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from ims_lti_py.tool_config import ToolConfig
 from django.views.generic import View
 import urllib.request, urllib.parse, urllib.error
 from django.http import HttpResponse, HttpResponseRedirect
-# from braces.views import CsrfExemptMixin
 from rest_framework.decorators import api_view
 
 
@@ -39,7 +37,7 @@ class LTI_STATES(enum.Enum):
 
 
 @csrf_exempt
-# @api_view(['POST'])
+@api_view(['POST'])
 def lti_launch(request):
     """Django view for the lti post request.
 

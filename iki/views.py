@@ -1,29 +1,13 @@
-from django.http import HttpResponse
-from django.template import Context, loader
-from django.shortcuts import render, redirect
+from django.template import loader
+from django.shortcuts import redirect
 from utils.CanvasHelper import get_data, given_consent, do_update_db
-from utils.ComparisonGroupFactory import set_goal_grade
 import json
 from iki.forms import GoalResetForm
 from django.contrib import messages
-from django.conf import settings
-# from django.core.urlresolvers import reverse
-
-import enum
-
-from iki import factory
-from .models import User
-from django.http import QueryDict
 from django.views.decorators.csrf import csrf_exempt
-from ims_lti_py.tool_config import ToolConfig
-from django.views.generic import View
-import urllib.request, urllib.parse, urllib.error
-from django.http import HttpResponse, HttpResponseRedirect
-# from braces.views import CsrfExemptMixin
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .models import User
-from django.views.generic.detail import DetailView
-
 
 
 @csrf_exempt

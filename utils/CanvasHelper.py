@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 from utils.bayesian import get_prediction
-from utils.dataset import create_training_set
+from utils.dataset import create_training_set, current_grade
 from background_task import background
 from iki.models import User
 from utils.ComparisonGroupFactory import make_comparison_group
@@ -21,41 +21,41 @@ API_KEY = open('api_key.txt', 'r').readlines()[0].strip()
 canvas = Canvas(API_URL, API_KEY)
 
 
-def current_scores(course):
-    """
-    Deprecated, use current_grade instead.
-    :param course:
-    :return:
-    """
-    " Returns list with all student average scores (ignoring ungraded assignments)"
-    # @TODO: get weight of assignment using assignment_id, add to dict
-    course_grades = {}
-    for enr in course.get_enrollments():
-        if enr.type == 'StudentEnrollment':
-            course_grades[enr.user_id] = enr.grades['current_score']
-            # print(enr.grades['current_score'])
-
-    return course_grades
-
-
-def current_grade(course):
-    assignments = course.get_assignments()
-    users = course.get_users(enrollment_type='student')
-    weighted_grade = {}
-
-    for student in users:
-        total_weight = 0
-        grade = 0
-        for assignment in assignments:
-            if assignment.grading_type == 'gpa_scale' and assignment.get_submission(student).grade:
-                assignment_id = assignment.assignment_group_id
-                weight = float(course.get_assignment_group(assignment_id).group_weight)
-                total_weight += weight
-                grade += float(assignment.get_submission(student).grade)*weight
-        if total_weight > 0:
-            weighted_grade[student.id] = grade/total_weight
-    print(weighted_grade)
-    return weighted_grade
+# def current_scores(course):
+#     """
+#     Deprecated, use current_grade instead.
+#     :param course:
+#     :return:
+#     """
+#     " Returns list with all student average scores (ignoring ungraded assignments)"
+#     # @TODO: get weight of assignment using assignment_id, add to dict
+#     course_grades = {}
+#     for enr in course.get_enrollments():
+#         if enr.type == 'StudentEnrollment':
+#             course_grades[enr.user_id] = enr.grades['current_score']
+#             # print(enr.grades['current_score'])
+#
+#     return course_grades
+#
+#
+# def current_grade(course):
+#     assignments = course.get_assignments()
+#     users = course.get_users(enrollment_type='student')
+#     weighted_grade = {}
+#
+#     for student in users:
+#         total_weight = 0
+#         grade = 0
+#         for assignment in assignments:
+#             if assignment.grading_type == 'gpa_scale' and assignment.get_submission(student).grade:
+#                 assignment_id = assignment.assignment_group_id
+#                 weight = float(course.get_assignment_group(assignment_id).group_weight)
+#                 total_weight += weight
+#                 grade += float(assignment.get_submission(student).grade)*weight
+#         if total_weight > 0:
+#             weighted_grade[student.id] = grade/total_weight
+#     print(weighted_grade)
+#     return weighted_grade
 
 
 def get_user_scores(course, user):

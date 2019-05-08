@@ -23,3 +23,5 @@ django-mysql==3.0.0.post1
 background_task==1.11.0
 django-simple-history==2.7.2
 django-reversion==2.2.1
+djangorestframework===3.9.1
+

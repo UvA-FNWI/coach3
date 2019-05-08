@@ -2,7 +2,7 @@ from iki.models import User
 import pandas as pd
 import numpy as np
 import random
-from utils.dataset import get_av_goal_data
+from utils.dataset import get_av_goal_data, current_grade
 import json
 
 
@@ -85,28 +85,72 @@ def dist_from_bottom(peers, average):
     return dist
 
 
-def get_special_set(peers, isTop, size):
+def get_special_set(peers, average, isTop, isOther, size):
+    """
+    Retrieves a comparison set for edge cases. Edge cases are students for which the algorithm could not find any
+    comparison set. It is the case for some students at the ends of the average grade distribution. If the student is
+    within the top or the bottom of her/his class, the comparison set will be the top and bottom groups, respectfully.
+    If the student is not part of the top. The comparison set will consist of 60% of the closest better peers and 40% of
+    the closes worse peers.
+    :param peers: An array containing the average grades of the whole cohort.
+    :param average: The students average grade.
+    :param isTop: True if the student is in the top of his/her class. False otherwise.
+    :param isOther: True, if the student is neither in the top, nor the bottom. False otherwise.
+    :param size: The desired size of the comparison set.
+    :return: A comparison set.
+    """
     avs = np.sort(peers['av'])
     if isTop:
         return avs[-size:]
-    return avs[:size]
+    elif not isOther:
+        return avs[:size]
+
+    highers = avs[np.where(avs > average)]
+    lowers = avs[np.where(avs <= average)]
+    n_highers = np.round(size*0.6)
+    n_lowers = size-n_highers
+    comparison_set = np.append(lowers[-n_lowers:], highers[:n_highers])
+    assert len(comparison_set) == 7, 'wrong size of set for edge case'
+    return comparison_set
 
 
 def get_set(average, goal_grade, av_goal_df, set_size):
     for i in range(10, 50):
         peers, w = get_same_goal_set(av_goal_df, i, goal_grade)
         if len(peers) == 0:
-            return np.zeros(set_size), w, False  # , w, [], False
+            has_solution = False
+            edge_case = 'error'
+            return np.zeros(set_size), w, has_solution, edge_case
         for j in range(0, 50):
             random.shuffle(peers)
-            start_set = peers[7:]
-            end_set = peers[:7]
+            start_set = peers[set_size:]
+            end_set = peers[:set_size]
             solution = make_comparison_set(start_set, end_set, average+0.5, average+1.0, set_size)
             if np.sum(solution) > 0:
-                return solution, w, True # , w, av, True
-            # accounts for special cases in which the user is either in the top 2 or bottom 2 of the cohort
+                has_solution = True
+                edge_case = 'no'
+                return solution, w, has_solution, edge_case
 
-    return np.zeros(set_size), w, False  # , w, av, False
+    # edge cases
+    if np.sum(solution) == 0:
+        if dist_from_top(av_goal_df, average)<= set_size:
+            isTop = True
+            isOther = False
+            edge_case = "top"
+        elif dist_from_bottom(av_goal_df, average) <= set_size:
+            isTop = False
+            isOther = False
+            edge_case = 'bottom'
+        else:
+            isTop = False
+            isOther = False
+        solution = get_special_set(av_goal_df, average, isTop, isOther, set_size)
+        has_solution = True
+        edge_case = 'other'
+        return  solution, 0, has_solution, edge_case
+    has_solution = False
+    edge_case = 'error'
+    return np.zeros(set_size), w, has_solution, edge_case
 
 
 def frequency_count_comp(grades, user_grade, nr_bins=20, minn=0.0, maxx=10.0):
@@ -137,10 +181,6 @@ def frequency_count_comp(grades, user_grade, nr_bins=20, minn=0.0, maxx=10.0):
                 student_bucket = data[i]['bucket']
 
     data.append({'assignment': student_bucket})
-    print('ici')
-    print(data)
-    print(type(data))
-    return data
 
 
 def make_comparison_group(user):
@@ -153,15 +193,10 @@ def make_comparison_group(user):
 
     av_goal_df = get_av_goal_data(user)
     solution, window, has_comparison = get_set(average, goal, av_goal_df, 7)
-    print('solution')
-    print(solution)
     group_as_frequency = frequency_count_comp(solution, average)
     solution_mean = np.mean(solution)
     solution_std = np.std(solution)
     solution_mean_distance = abs(average-solution_mean)
-    # TODO add edge cases
-    # user.comparison_group = json.dumps(group_as_frequency)
-    # user.save()
     return group_as_frequency, has_comparison, solution_mean, solution_std, solution_mean_distance
 
 
@@ -171,16 +206,11 @@ def set_goal_grade(goal, student_id):
     comparison_group, has_comparison = make_set_for_diagram(user)
     user.has_comparison_group = has_comparison
     user.comparison_group = json.dumps(comparison_group)
-    print('comparison group')
-    print(type(comparison_group))
-    print(comparison_group)
-
-
     user.save()
     # make_comparison_group(user)
 
 
-#############
+############# This part is not used
 
 def make_set_for_diagram(user):
     """
