@@ -81,8 +81,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="265" lean-forward="true" selection-start-line="265" selection-end-line="265" />
+            <state relative-caret-position="408">
+              <caret line="436" column="16" lean-forward="true" selection-start-line="436" selection-start-column="16" selection-end-line="436" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -384,12 +384,12 @@
       <workItem from="1554894778038" duration="16340000" />
       <workItem from="1555486667708" duration="118000" />
       <workItem from="1555576455773" duration="69861000" />
-      <workItem from="1556562108094" duration="47596000" />
+      <workItem from="1556562108094" duration="47985000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="164032000" />
+    <option name="totallyTimeSpent" value="164421000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -784,8 +784,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="265" lean-forward="true" selection-start-line="265" selection-end-line="265" />
+        <state relative-caret-position="408">
+          <caret line="436" column="16" lean-forward="true" selection-start-line="436" selection-start-column="16" selection-end-line="436" selection-end-column="16" />
         </state>
       </provider>
     </entry>
