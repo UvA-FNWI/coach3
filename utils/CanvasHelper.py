@@ -8,6 +8,7 @@ from background_task import background
 from iki.models import User
 from utils.ComparisonGroupFactory import make_comparison_group
 import reversion
+import datetime
 
 
 # @TODO: change to IKI environment (UvA)
@@ -136,6 +137,7 @@ def update_db(student_id):
     if user.assessments != grades.shape[1]:
         do_update_db(student_id)
     print('task done')
+    print(datetime.datetime.now())
 
 def do_update_db(student_id):
     user = User.objects.filter(iki_user_id=student_id)[0]
@@ -152,39 +154,23 @@ def do_update_db(student_id):
         # current_score = current_scores(course)
         current_score = current_grade(course)
         # Calculate and save data for bar plot
-        print('current score')
-        print(int(student_id) in current_score.keys())
         if int(student_id) not in current_score.keys():
             current_score[int(student_id)] = 0
-        print('current score')
-        print(current_score)
 
         user.av_grade = current_score[int(student_id)]
-        # print('av grade:', current_score[student_id])
 
-        # make_comparison_group(user)
-        # comparison_group, has_comparison = make_set_for_diagram(user)
-        comparison_group, has_comparison, solution_mean, solution_std, solution_mean_distance = make_comparison_group(
-            user)
+        comparison_group, has_comparison, solution_mean, solution_std, solution_mean_distance = make_comparison_group(user)
+
+        print('comparison')
+        print(comparison_group)
         print(has_comparison, solution_mean, solution_std, solution_mean_distance)
         user.comparison_group = json.dumps(comparison_group)
-        print('before')
-        print(json.dumps(comparison_group))
-        print(type(comparison_group))
-        print('after')
-        print(user.comparison_group)
-        print(type(user.comparison_group))
+
         user.has_comparison_group = has_comparison
         user.comparison_distance_mean = solution_mean_distance
         user.comparison_mean = solution_mean
         user.comparison_std = solution_std
 
-        # bardata = frequency_count(current_score, student_id)
-        # print('bardata')
-        # print(bardata)
-        # user.comparison_group = json.dumps(bardata)
-
-        # -----------------------------------------
 
         train_data, train_grades = create_training_set(grades.shape[1])
         est_grade, est_sd = get_prediction(grades.values, train_data, train_grades)
@@ -238,21 +224,22 @@ def get_data(user):
     # print(comparison_groups)
     assert type(user.comparison_group) == str, 'the type of the user comparison is not str, it is {}'.format(type(user.comparison_group))
     bardata = json.loads(user.comparison_group)
+    comp_curve = ({'comp_mean': user.comparison_mean, 'comp_std': user.comparison_std})
 
-    return {"bardata": bardata, "gaussdata": gaussdata}
+    return {"bardata": bardata, "gaussdata": gaussdata, "comp_curve": comp_curve}
 
 
-def given_consent(user):
-    " Returns if user has given consent to use his/her data for visual"
-    consent = None
-    course_id = user.course.iki_course_id
-    course = canvas.get_course(course_id)
-    for quizz in course.get_quizzes():
-        for resp in quizz.get_all_quiz_submissions():
-            if resp['user_id'] == user.iki_user_id:
-                if resp['score'] == 0.0:
-                    consent = False
-                elif resp['score'] == 1.0:
-                    consent = True
-    return consent
+# def given_consent(user):
+#     " Returns if user has given consent to use his/her data for visual"
+#     consent = None
+#     course_id = user.course.iki_course_id
+#     course = canvas.get_course(course_id)
+#     for quizz in course.get_quizzes():
+#         for resp in quizz.get_all_quiz_submissions():
+#             if resp['user_id'] == user.iki_user_id:
+#                 if resp['score'] == 0.0:
+#                     consent = False
+#                 elif resp['score'] == 1.0:
+#                     consent = True
+#     return consent
 

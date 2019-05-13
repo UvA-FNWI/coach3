@@ -4,6 +4,7 @@ import numpy as np
 import random
 from utils.dataset import get_av_goal_data, current_grade
 import json
+from utils.ComparisonBuckets import frequency_count_comp
 
 
 def get_same_goal_set(student_data, size, goal_grade):
@@ -153,34 +154,35 @@ def get_set(average, goal_grade, av_goal_df, set_size):
     return np.zeros(set_size), w, has_solution, edge_case
 
 
-def frequency_count_comp(grades, user_grade, nr_bins=20, minn=0.0, maxx=10.0):
-    " Creates bins for histogram plot of grades. Finds correct student assignment."
-    ret = []
-    data = []
-    binsize = (maxx - minn) / float(nr_bins)
-    student_bucket = []
-    # construct bins
-    # each bin consist of a start position and end position and a zero value(?)
-    # QUESTION: why the null value?
-    # each bin represents a grade on the x-axis
-    # bins are stored in the ret variable
-    for x in range(0, nr_bins):
-        start = minn + x * binsize
-        ret.append([start, start+binsize, 0])
-        data.append({'bucket': start+binsize, 'size': 0})
-        # QUESTION: why do we need the ret array?
-    # assign items to bin
-    for item in grades:
-        for i, binn in enumerate(ret):
-            if item is not None and binn[0] <= item < binn[1]:
-                    data[i]['size'] += 1
-            # sets aside the student grade in another student_bucket
-            # NOTE: the student grade is still included in the general bucket
-            # as it will be included in the average grade calculation
-            if binn[0] <= user_grade < binn[1]:
-                student_bucket = data[i]['bucket']
-
-    data.append({'assignment': student_bucket})
+# def frequency_count_comp(grades, user_grade, nr_bins=20, minn=0.0, maxx=10.0):
+#     " Creates bins for histogram plot of grades. Finds correct student assignment."
+#     ret = []
+#     data = []
+#     binsize = (maxx - minn) / float(nr_bins)
+#     student_bucket = []
+#     # construct bins
+#     # each bin consist of a start position and end position and a zero value(?)
+#     # QUESTION: why the null value?
+#     # each bin represents a grade on the x-axis
+#     # bins are stored in the ret variable
+#     for x in range(1, nr_bins):
+#         start = minn + x * binsize
+#         ret.append([start, start+binsize, 0])
+#         data.append({'bucket': start+binsize, 'size': 0})
+#         # QUESTION: why do we need the ret array?
+#     # assign items to bin
+#     for item in grades:
+#         for i, binn in enumerate(ret):
+#             if item is not None and binn[0] <= item < binn[1]:
+#                     data[i]['size'] += 1
+#             # sets aside the student grade in another student_bucket
+#             # NOTE: the student grade is still included in the general bucket
+#             # as it will be included in the average grade calculation
+#             if binn[0] <= user_grade < binn[1]:
+#                 student_bucket = data[i]['bucket']
+#
+#     data.append({'assignment': student_bucket})
+#     return data
 
 
 def make_comparison_group(user):
@@ -192,7 +194,9 @@ def make_comparison_group(user):
 
 
     av_goal_df = get_av_goal_data(user)
-    solution, window, has_comparison = get_set(average, goal, av_goal_df, 7)
+    solution, window, has_comparison, edge_case = get_set(average, goal, av_goal_df, 7)
+    print('solution')
+    print(solution)
     group_as_frequency = frequency_count_comp(solution, average)
     solution_mean = np.mean(solution)
     solution_std = np.std(solution)

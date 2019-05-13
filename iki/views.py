@@ -1,6 +1,6 @@
 from django.template import loader
 from django.shortcuts import redirect
-from utils.CanvasHelper import get_data, given_consent, do_update_db
+from utils.CanvasHelper import get_data, do_update_db
 import json
 from iki.forms import GoalResetForm
 from django.contrib import messages
@@ -68,9 +68,3 @@ def new_goal(request, student_id):
     # return redirect("iki:index", {'user_id': user.iki_user_id})
     return redirect("iki:index", user_id=student_id)
 
-
-# @csrf_exempt
-# class IndexView(DetailView):
-#     model = User
-#
-#     def get

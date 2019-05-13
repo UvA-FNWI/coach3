@@ -1,5 +1,8 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
+from utils.ComparisonBuckets import frequency_count_comp
+import numpy as np
+import json
 
 # Create your models here.
 
@@ -46,8 +49,6 @@ class User(models.Model):
 
     comparison_group = models.TextField(max_length=600)
 
-    # comparson_group = JSONField()
-
     goal_grade = models.FloatField(default=0.0)
 
     has_comparison_group = models.BooleanField(default=False)
@@ -85,6 +86,8 @@ class User(models.Model):
             lti_id=request['user_id'],
             iki_user_id=request['custom_canvas_user_id'],
             course=Course.objects.create(iki_course_id=course_id),
+            comparison_group=json.dumps(frequency_count_comp(np.zeros(7), 0)),
+            goal_grade = request['goal']
             )
         user.save()
 

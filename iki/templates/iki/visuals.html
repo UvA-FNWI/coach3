@@ -80,29 +80,20 @@ function display_bar(){
     // Get student group assignment
     var assignment = data[data.length-1];
     data.splice(-1,1);
-    var params = received_data.gaussdata;
-    var mean1 = params.weighted_grade;
-    var sigma1 = params.sigma;
+    var params = received_data.comp_curve;
+    {#var mean1 = params.comp_mean;#}
+    var mean1 = 5;
+    var sigma1 = params.comp_std;
 
-    var comparison_curve = getData(mean1,sigma1);
+    var comparison_curve = getDataBar(mean1,sigma1);
+    var cve = [];
 
+    for(i=0; i<comparison_curve.length;i++){
+        if(i/10==1){
+            cve.push(comparison_curve[i])
+        }
+    }
 
-    {#// Check if data has not only 0 value when assignment is non zero#}
-    {#if (assignment.assignment!=0){#}
-    {#    var group_sizes = data.map(function(d) {return d.size}).reduce(function(a,b) {return a+b;},0);#}
-    {#    if(group_sizes == 0){#}
-    {#        var goal_grade = prompt("No set of peer students have been found for your goal grade.\n" +#}
-    {#            "Please update your goal grade:", "My goal grade")#}
-    {#    }#}
-    {#}#}
-    {##}
-    {#var goal_grade = prompt("No set of peer students have been found for your goal grade.\n" +#}
-    {#            "Please update your goal grade:", "My goal grade")#}
-
-    {#if(goal_grade != null){#}
-    {#    document.getElementById("demo").innerHTML =#}
-    {##}
-    {#}#}
 
     // Get total number of students
     var total = 0
@@ -117,6 +108,13 @@ function display_bar(){
         }
     });
     max += 1;
+
+    {#var comparison_curve = [ [mean1-sigma1*3,max*0.0001],[mean1-sigma1*2,max*0.136],#}
+    {#    [mean1-sigma1,max*0.341],[mean1,max], [mean1+sigma1, max*0.341], [mean1+sigma1*2, max*0.136],#}
+    {#    [mean1+sigma1*3, max*0.0001]];#}
+
+    {#var comparison_curve = [[0,0],[1,0],[2,5],[10,0]];#}
+
 
     {#var test = getData(5, 1);#}
 
@@ -135,24 +133,6 @@ function display_bar(){
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
         y = d3.scaleLinear().rangeRound([height, 0]);
 
-
-    {#var xScale = d3.scaleBand()#}
-    {#            .rangeRound([0, width])#}
-    {#            .padding(0.1)#}
-    {#            .domain(dataset.map(function(d) {#}
-    {#              return d[0];#}
-    {#            }));#}
-    {#  yScale = d3.scaleLinear()#}
-    {#            .rangeRound([height, 0])#}
-    {#            .domain([0, d3.max(dataset, (function (d) {#}
-    {#              return d[2];#}
-    {#            }))]);#}
-    {##}
-    var line2 = d3.line()
-      .x(function(d, i) { return xScale(d[0]) + xScale.bandwidth() / 2; })
-      .y(function(d) { return yScale(d[1]); })
-      .curve(d3.curveMonotoneX);
-
     {#var line3 = d3.line()#}
     {#  .x(function(d, i) { return xScale(d.q) + xScale.bandwidth() / 2; })#}
     {#  .y(function(d) { return yScale(d.p); })#}
@@ -163,18 +143,54 @@ function display_bar(){
     {#x.domain([0,1,2,3,4,5,6,7,8,9,10]);#}
     y.domain([0,max]);
 
-    var line_a = d3.line()
+    var xScale = d3.scaleBand()
+                .rangeRound([0, width])
+                .padding(0.1)
+                .domain(dataset.map(function(d) {
+                  return d[0];
+                }));
+      yScale = d3.scaleLinear()
+                .rangeRound([height, 0])
+                .domain([0, max]
+                );
+
+    var xScale_b = d3.scaleBand()
+            .rangeRound([0, width+10])
+            .padding(0.1)
+            .domain(comparison_curve.map(function(d) {
+              return d[0];
+              })),
+            {#.domain([0,10]),#}
+        yScale_b = d3.scaleLinear()
+                .rangeRound([height, 0])
+                .domain([0, 1]);
+
+    var line2 = d3.line()
+      .x(function(d, i) { return xScale(d[0]) + xScale.bandwidth() / 2; })
+      .y(function(d) { return yScale(d[1]); })
+      .curve(d3.curveMonotoneX);
+
+    var line_b = d3.line()
+      .x(function(d, i) { return xScale_b(d[0])+ xScale_b.bandwidth()/2; })
+      .y(function(d) { return yScale_b(d[1]); })
+      .curve(d3.curveBasis);
+
+    var line = d3.line()
       .x(function(d) {
           return x(d.q);
       })
       .y(function(d) {
           return y(d.p);
       });
-    window.alert(line_a(comparison_curve))
+    {#for (var i = 0; i < 20; i++){#}
+    {#    window.alert(comparison_curve[i]);#}
+    {#}#}
 
-
-
-
+    {#window.alert(line2(dataset));#}
+    {#window.alert(comparison_curve.map(function(d) {#}
+    {#          return d[0];#}
+    {#          }));#}
+    window.alert(cve);
 
     var svg_Bar = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -228,45 +244,55 @@ function display_bar(){
         .attr("text-anchor", "end")
         .text("size");
 
-    // Bars of other students
-    var bar1 = g.selectAll("rect")
-        .data(data)
-        .enter().append("g");
+    if (assignment.assignment > 0) {
+        // Bars of other students
+        var bar1 = g.selectAll("rect")
+            .data(data)
+            .enter().append("g");
 
-    bar1.append("rect")
-        .attr("class", "bar")
-        .attr("border", 10)
-        .style("stroke","#2E86C1")
-        .attr("fill", "#5DADE2")
-        .attr("x", function(d) { return x(d.bucket)+1; })
-        .attr("y", function(d) { return y(d.size); })
-        .attr("width", x.bandwidth()-2)
-        .attr("height", function(d) { return height - y(d.size); });
+        bar1.append("rect")
+            .attr("class", "bar")
+            .attr("border", 10)
+            .style("stroke", "#2E86C1")
+            .attr("fill", "#5DADE2")
+            .attr("x", function (d) {
+                return x(d.bucket) + 1;
+            })
+            .attr("y", function (d) {
+                return y(d.size);
+            })
+            .attr("width", x.bandwidth() - 2)
+            .attr("height", function (d) {
+                return height - y(d.size);
+            });
 
-    // Bar of user
+        // Bar of user
 
-    var bar2 = g.selectAll("rect2")
-        .data(data)
-        .enter().append("g");
+        bar1.append("rect")
+            .attr("class", "bar")
+            .attr("border", 10)
+            .style("stroke", "#D68910")
+            .attr("fill", "#F5B041")
+            .attr("x", function (d) {
+                return x(assignment.assignment) + 1;
+            })
+            .attr("y", function (d) {
+                return y(1);
+            })
+            .attr("width", x.bandwidth() - 2)
+            .attr("height", function (d) {
+                return height - y(1);
+            });
 
-    bar1.append("rect")
-        .attr("class", "bar")
-        .attr("border", 10)
-        .style("stroke","#D68910")
-        .attr("fill", "#F5B041")
-        .attr("x", function(d) { return x(assignment.assignment)+2.5; })
-        .attr("y", function(d) { return y(1); })
-        .attr("width", x.bandwidth()-5)
-        .attr("height", function(d) { return height-y(1); });
-
-    bar1.append("path")
-      .attr("class", "line")
-      .attr("d", line_a(comparison_curve));
-    {#.attr("d", line2(dataset));#}
+        bar1.append("path")
+          .attr("class", "line")
+          .attr("d", line_b(comparison_curve));
+        {#.attr("d", line2(dataset));#}
+    }
 
 
 }
-function display_Gaussian(line) {
+function display_Gaussian() {
     params = received_data.gaussdata
     var mean = params.weighted_grade;
     var sigma = params.sigma
@@ -374,6 +400,22 @@ function getData(mean, sigma) {
   return dataa
 }
 
+function getDataBar(mean, sigma){
+    var data_b = []
+    for (var i = 0; i < 304; i++) {
+      var q = normal(-2,12,1); // calc random draw from normal dist
+      var p = gaussian(q, mean, sigma); // calc prob of rand draw
+
+      var pair = [q,p];
+      if (q < 10.0 && q > 0){ data_b.push(pair) }
+  };
+  // Sort data for plotting
+  data_b.sort(function(x, y) {
+      return x[0] - y[0];
+  });
+  return data_b
+    }
+
 function normal(min, max, skew) {
     var u = 0, v = 0;
     while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
@@ -395,6 +437,156 @@ function gaussian(x, mean, sigma) {
     return gaussianConstant * Math.exp(-.5 * x * x) / sigma;
 };
 
+function draw() {
+
+    var data2 = received_data.bardata;
+    // Get student group assignment
+    var assignment = data2[data2.length-1];
+    data2.splice(-1,1);
+    var allCongruentData = data2.map(function(e) {
+        return e.Congruent;
+      });
+      var allIncongruentData = data2.map(function(e) {
+        return e.Incongruent;
+      });
+
+      var formatCount = d3.format(",.0f");
+
+      var svg = d3.select("svg"),
+        margin = {
+          top: 10,
+          right: 30,
+          bottom: 30,
+          left: 30
+        },
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var x = d3.scaleLinear()
+        .rangeRound([0, width])
+        .domain([8, 36]);
+
+      var bins1 = d3.histogram()
+        .domain(x.domain())
+        .thresholds(x.ticks(40))
+        (allCongruentData);
+
+      var line = d3.line()
+          .x(function(d) { return x((d.x0 + d.x1)/2); })
+          .y(function(d) { return y(d.length); })
+          .curve(d3.curveCatmullRom.alpha(0.5));
+
+      var bins2 = d3.histogram()
+        .domain(x.domain())
+        .thresholds(x.ticks(40))
+        (allIncongruentData);
+
+      var y = d3.scaleLinear()
+        .domain([0, d3.max(bins1, function(d) {
+          return d.length;
+        })])
+        .range([height, 0]);
+
+      var bar1 = g.selectAll(".bar1")
+        .data(bins1)
+        .enter().append("g")
+        .attr("class", "bar1")
+        .attr("transform", function(d) {
+          return "translate(" + x(d.x0) + "," + y(d.length) + ")";
+        });
+
+      g.append("path")
+       .attr("d", line(bins1))
+       .attr("class", "bins1");
+
+      bar1.append("rect")
+        .attr("x", 0.5)
+        .attr("width", x(bins1[0].x1) - x(bins1[0].x0) - 1)
+        .attr("height", function(d) {
+          return height - y(d.length);
+        });
+
+
+      var bar2 = g.selectAll(".bar2")
+        .data(bins2)
+        .enter().append("g")
+        .attr("class", "bar2")
+        .attr("transform", function(d) {
+          return "translate(" + x(d.x0) + "," + y(d.length) + ")";
+        });
+
+      g.append("path")
+       .attr("d", line(bins2))
+       .attr("class", "bins2");
+
+      bar2.append("rect")
+        .attr("x", 0.5)
+        .attr("width", x(bins2[0].x1) - x(bins2[0].x0) - 1)
+        .attr("height", function(d) {
+          return height - y(d.length);
+        });
+
+      bar1.append("text")
+        .attr("dy", ".75em") // why?
+        .attr("y", 6)
+        .attr("x", (x(bins1[0].x1) - x(bins1[0].x0)) / 2)
+        .attr("text-anchor", "middle")
+        .text(function(d) {
+          return formatCount(d.length);
+        });
+
+      bar2.append("text")
+        .attr("dy", ".75em") // why?
+        .attr("y", 6)
+        .attr("x", (x(bins2[0].x1) - x(bins2[0].x0)) / 2)
+        .attr("text-anchor", "middle")
+        .text(function(d) {
+          return formatCount(d.length);
+        });
+
+      g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+      var legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + (width - 245) + "," + 40 + ")")
+        .selectAll("g")
+        .data(["Congruent", "Incongruent"])
+        .enter().append("g");
+
+      legend.append("text")
+        .attr("y", function(d, i) {
+          return i * 30 + 5;
+        })
+        .attr("x", 200)
+        .text(function(d) {
+          return d;
+        });
+
+      legend.append("rect")
+        .attr("y", function(d, i) {
+          return i * 30 - 8;
+        })
+        .attr("x", 167)
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("fill", function(d) {
+          if (d == "Congruent") {
+            return 'rgba(0,0,255,0.6';
+          } else {
+            return 'rgba(255,0,0,0.6';
+          }
+        });
+
+      // g.append("path")
+      //     .datum(data)
+      //     .attr("d", line);
+
+    }
+
 // function normalcdf(mean, sigma, x) {
 //     // see wolframalpha.com
 //     var z = (x-mean)/Math.sqrt(2*sigma*sigma);
@@ -412,6 +604,7 @@ function gaussian(x, mean, sigma) {
 
 display_bar()
 display_Gaussian()
+{#draw()#}
 {#get_name()#}
 
 </script>

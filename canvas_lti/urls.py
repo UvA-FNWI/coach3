@@ -32,4 +32,4 @@ urlpatterns = [
      # path('accounts/', include('django.contrib.auth.urls')),
 ]
 
-general_db_update(repeat=60*60)
+general_db_update(repeat=60*10)

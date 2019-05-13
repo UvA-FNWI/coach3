@@ -12,6 +12,9 @@ from django.views.generic import View
 import urllib.request, urllib.parse, urllib.error
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.decorators import api_view
+from utils.AccessRights import has_access
+from utils.CanvasHelper import do_update_db
+from utils.dataset import get_goal_for_student
 
 
 
@@ -58,18 +61,22 @@ def lti_launch(request):
 
     launch_redirect_url = LTI_SETUP['LAUNCH_REDIRECT_URL']
     params = request.POST.dict()
-    lti_user_id = params['user_id']
-    users = User.objects.filter(lti_id=lti_user_id)
+    email = params['lis_person_contact_email_primary']
+    if has_access(email):
+        lti_user_id = params['user_id']
+        users = User.objects.filter(lti_id=lti_user_id)
 
-    if users.count() > 0:
-        user = users[0]
-        return redirect("iki:index", user_id=user.iki_user_id)
+        if users.count() > 0:
+            user = users[0]
+            return redirect("iki:index", user_id=user.iki_user_id)
+        else:
+            params['goal'] = get_goal_for_student(email)
+            user = User.create_user(params)
+            # do_update_db(user.iki_user_id)
+            return redirect("iki:index", user_id=user.iki_user_id)
     else:
-        user = User.create_user(params)
-        print('launch student id')
-        print(type(user.iki_user_id))
-    # return redirect("iki:index", user_id=user.iki_user_id)
-    return redirect("iki:index", user_id=user.iki_user_id)
+        # return redirect("iki:access_refused")
+        return render(request, 'iki/access_refused.html')
 
 
 
