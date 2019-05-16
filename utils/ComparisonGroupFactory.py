@@ -116,18 +116,22 @@ def get_special_set(peers, average, isTop, isOther, size):
 
 
 def get_set(average, goal_grade, av_goal_df, set_size):
+
+    # solution = []
     for i in range(10, 50):
         peers, w = get_same_goal_set(av_goal_df, i, goal_grade)
         if len(peers) == 0:
             has_solution = False
             edge_case = 'error'
             return np.zeros(set_size), w, has_solution, edge_case
-        for j in range(0, 50):
+        for j in range(0, 100):
             random.shuffle(peers)
             start_set = peers[set_size:]
             end_set = peers[:set_size]
             solution = make_comparison_set(start_set, end_set, average+0.5, average+1.0, set_size)
-            if np.sum(solution) > 0:
+            better_peer = solution[solution>average]
+            worse_peers = solution[solution<=average]
+            if np.sum(solution) > 0 and len(better_peer)==4:
                 has_solution = True
                 edge_case = 'no'
                 return solution, w, has_solution, edge_case
@@ -201,7 +205,7 @@ def make_comparison_group(user):
     solution_mean = np.mean(solution)
     solution_std = np.std(solution)
     solution_mean_distance = abs(average-solution_mean)
-    return group_as_frequency, has_comparison, solution_mean, solution_std, solution_mean_distance
+    return group_as_frequency, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case
 
 
 def set_goal_grade(goal, student_id):

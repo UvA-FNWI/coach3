@@ -68,6 +68,8 @@ def lti_launch(request):
 
         if users.count() > 0:
             user = users[0]
+            user.log_count += 1
+            user.save()
             return redirect("iki:index", user_id=user.iki_user_id)
         else:
             params['goal'] = get_goal_for_student(email)

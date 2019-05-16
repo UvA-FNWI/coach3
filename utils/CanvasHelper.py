@@ -9,15 +9,16 @@ from iki.models import User
 from utils.ComparisonGroupFactory import make_comparison_group
 import reversion
 import datetime
+from django.conf import settings
 
 
 # @TODO: change to IKI environment (UvA)
 
 ### SETUP ###
 # Canvas API URL
-API_URL = open('api_url.txt', 'r').readlines()[0].strip()
+API_URL = open(settings.API_DIR+'api_url.txt', 'r').readlines()[0].strip()
 # Canvas API key
-API_KEY = open('api_key.txt', 'r').readlines()[0].strip()
+API_KEY = open(settings.API_DIR+'api_key.txt', 'r').readlines()[0].strip()
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 
@@ -159,17 +160,15 @@ def do_update_db(student_id):
 
         user.av_grade = current_score[int(student_id)]
 
-        comparison_group, has_comparison, solution_mean, solution_std, solution_mean_distance = make_comparison_group(user)
+        comparison_group, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case = make_comparison_group(user)
 
-        print('comparison')
-        print(comparison_group)
-        print(has_comparison, solution_mean, solution_std, solution_mean_distance)
+
         user.comparison_group = json.dumps(comparison_group)
-
         user.has_comparison_group = has_comparison
         user.comparison_distance_mean = solution_mean_distance
         user.comparison_mean = solution_mean
         user.comparison_std = solution_std
+        user.edge_case = edge_case
 
 
         train_data, train_grades = create_training_set(grades.shape[1])

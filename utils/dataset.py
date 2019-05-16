@@ -3,10 +3,11 @@ import numpy as np
 from iki.models import User
 from canvasapi import Canvas
 from utils.AccessRights import can_use_data, load_access_file
+from django.conf import settings
 
-API_URL = open('api_url.txt', 'r').readlines()[0].strip()
+API_URL = open(settings.BASE_DIR+'api_url.txt', 'r').readlines()[0].strip()
 # Canvas API key
-API_KEY = open('api_key.txt', 'r').readlines()[0].strip()
+API_KEY = open(settings.BASE_DIR+'api_key.txt', 'r').readlines()[0].strip()
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 

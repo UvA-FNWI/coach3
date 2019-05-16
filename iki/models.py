@@ -59,7 +59,9 @@ class User(models.Model):
 
     comparison_std = models.FloatField(default=0.0)
 
-    is_edge_case = models.BooleanField(default=False)
+    edge_case = models.CharField(null=True, max_length=20)
+
+    log_count = models.IntegerField(default=1)
 
     history = HistoricalRecords()
 

@@ -14,6 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+API_DIR = os.path.join(BASE_DIR,'api/')
+FILES_DIR = os.path.join(BASE_DIR, 'files')
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +27,7 @@ SECRET_KEY = '0v-n_tq)-s8f$8%2=nw+f41do*1wg6d*ja=+m2dm56n=fl&trt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://learn-lti.herokuapp.com/', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['https://learn-lti.herokuapp.com/', 'localhost', '127.0.0.1', 'agile007.science.uva.nl']
 
 
 # Application definition

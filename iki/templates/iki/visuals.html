@@ -33,35 +33,6 @@
 </body>
 <script type="text/javascript">
 
-var dataset = [
-    ['札幌',703, 1902],
-    ['清水',1473,3341],
-    ['松本',863,1935],
-    ['Ｃ大阪',1494,3008],
-    ['京都',965,1743],
-    ['岡山',568,1271],
-    ['町田',189, 626],
-    ['横浜ＦＣ',464, 1064],
-    ['徳島',731, 1443],
-    ['愛媛',306, 630],
-    ['千葉',899, 2556],
-    ['山口',231, 880],
-    ['水戸',262, 589],
-    ['山形',429, 1497],
-    ['長崎',322, 749],
-    ['熊本',315, 720],
-    ['群馬',228, 522],
-    ['東京Ｖ',436, 1391],
-    ['讃岐',287, 613],
-    ['岐阜',419,932],
-    ['金沢',296,612],
-    ['北九州',343,855]
-  ];
-
-var norma = [ 1.7626123 ,  1.49828859,  0.27964945,  1.45344223, -1.00934951,
-        0.445325  ,  1.06075561, -1.11652082,  1.34952093, -0.88194799];
-
-
 
 // receive relevant data from Django
 var received_data  = JSON.parse('{{ data | safe }}');
@@ -82,18 +53,12 @@ function display_bar(){
     data.splice(-1,1);
     var params = received_data.comp_curve;
     {#var mean1 = params.comp_mean;#}
-    var mean1 = 5;
+    var mean1 = params.comp_mean;
     var sigma1 = params.comp_std;
+    var mean2 = +Math.log10(100000*mean1)/mean1;
 
+    //for some reason peak is of the mean is shifted by -1.5 when drawn. Add +3 to the mean to compensate.
     var comparison_curve = getDataBar(mean1,sigma1);
-    var cve = [];
-
-    for(i=0; i<comparison_curve.length;i++){
-        if(i/10==1){
-            cve.push(comparison_curve[i])
-        }
-    }
-
 
     // Get total number of students
     var total = 0
@@ -108,15 +73,6 @@ function display_bar(){
         }
     });
     max += 1;
-
-    {#var comparison_curve = [ [mean1-sigma1*3,max*0.0001],[mean1-sigma1*2,max*0.136],#}
-    {#    [mean1-sigma1,max*0.341],[mean1,max], [mean1+sigma1, max*0.341], [mean1+sigma1*2, max*0.136],#}
-    {#    [mean1+sigma1*3, max*0.0001]];#}
-
-    {#var comparison_curve = [[0,0],[1,0],[2,5],[10,0]];#}
-
-
-    {#var test = getData(5, 1);#}
 
 
     {% comment %}// Normalize data
@@ -133,64 +89,35 @@ function display_bar(){
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
         y = d3.scaleLinear().rangeRound([height, 0]);
 
-    {#var line3 = d3.line()#}
-    {#  .x(function(d, i) { return xScale(d.q) + xScale.bandwidth() / 2; })#}
-    {#  .y(function(d) { return yScale(d.p); })#}
-    {#  .curve(d3.curveMonotoneX);#}
 
 
     x.domain(data.map(function(d) { return d.bucket; }));
     {#x.domain([0,1,2,3,4,5,6,7,8,9,10]);#}
     y.domain([0,max]);
 
-    var xScale = d3.scaleBand()
-                .rangeRound([0, width])
-                .padding(0.1)
-                .domain(dataset.map(function(d) {
-                  return d[0];
-                }));
-      yScale = d3.scaleLinear()
-                .rangeRound([height, 0])
-                .domain([0, max]
-                );
 
     var xScale_b = d3.scaleBand()
-            .rangeRound([0, width+10])
+            .rangeRound([0, width])
             .padding(0.1)
-            .domain(comparison_curve.map(function(d) {
-              return d[0];
-              })),
-            {#.domain([0,10]),#}
+            {#.domain(comparison_curve.map(function(d) {#}
+            {#  return d[0];#}
+            {#  })),#}
+            {#.domain([1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10]),#}
+            .domain(data.map(function(d) { return d.bucket; })),
         yScale_b = d3.scaleLinear()
                 .rangeRound([height, 0])
-                .domain([0, 1]);
+                .domain([0, 0.7]);
 
-    var line2 = d3.line()
-      .x(function(d, i) { return xScale(d[0]) + xScale.bandwidth() / 2; })
-      .y(function(d) { return yScale(d[1]); })
-      .curve(d3.curveMonotoneX);
 
     var line_b = d3.line()
-      .x(function(d, i) { return xScale_b(d[0])+ xScale_b.bandwidth()/2; })
+      .x(function(d, i) { return xScale_b(d[0]+2); })
       .y(function(d) { return yScale_b(d[1]); })
-      .curve(d3.curveBasis);
+      .curve(d3.curveLinear);
 
-    var line = d3.line()
-      .x(function(d) {
-          return x(d.q);
-      })
-      .y(function(d) {
-          return y(d.p);
-      });
-    {#for (var i = 0; i < 20; i++){#}
-    {#    window.alert(comparison_curve[i]);#}
-    {#}#}
 
-    {#window.alert(line2(dataset));#}
-    {#window.alert(comparison_curve.map(function(d) {#}
-    {#          return d[0];#}
-    {#          }));#}
-    window.alert(cve);
+
+    {#window.alert(line_b(comparison_curve));#}
+    {#window.alert(Math.max(...comparison_curve));#}
 
     var svg_Bar = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -221,7 +148,7 @@ function display_bar(){
       .attr("text-anchor", "end")
       .attr("transform", "rotate(-90)")
       .attr("x", 3)
-      .attr("y", -40)
+      .attr("y", -25)
       .text("Aantal studenten");
 
     {#var g = svg_Bar.append("g")#}
@@ -274,12 +201,12 @@ function display_bar(){
             .style("stroke", "#D68910")
             .attr("fill", "#F5B041")
             .attr("x", function (d) {
-                return x(assignment.assignment) + 1;
+                return x(assignment.assignment) + 2.5;
             })
             .attr("y", function (d) {
                 return y(1);
             })
-            .attr("width", x.bandwidth() - 2)
+            .attr("width", x.bandwidth() - 5)
             .attr("height", function (d) {
                 return height - y(1);
             });
@@ -401,18 +328,18 @@ function getData(mean, sigma) {
 }
 
 function getDataBar(mean, sigma){
-    var data_b = []
-    for (var i = 0; i < 304; i++) {
-      var q = normal(-2,12,1); // calc random draw from normal dist
-      var p = gaussian(q, mean, sigma); // calc prob of rand draw
+    var data_b = [];
+    for (var i = 0; i < 20; i++) {
+      var q = i*0.5; // calc random draw from normal dist
+      var p = gaussian_bar(i, mean, sigma); // calc prob of rand draw
 
       var pair = [q,p];
-      if (q < 10.0 && q > 0){ data_b.push(pair) }
+      data_b.push(pair)
   };
   // Sort data for plotting
-  data_b.sort(function(x, y) {
-      return x[0] - y[0];
-  });
+  {#data_b.sort(function(x, y) {#}
+  {#    return x[0] - y[0];#}
+  {# });#}
   return data_b
     }
 
@@ -429,6 +356,13 @@ function normal(min, max, skew) {
     return num;
 }
 
+function gaussian_bar(x, mean, std){
+        var ni1 = 1 / (std * Math.sqrt(2 * Math.PI));
+        var ni2 = Math.exp(-1*((x-mean)*(x-mean))/(2* (std*std)))
+    return ni1*ni2;
+    }
+
+
 //taken from Jason Davies science library
 // https://github.com/jasondavies/science.js/
 function gaussian(x, mean, sigma) {
@@ -436,156 +370,6 @@ function gaussian(x, mean, sigma) {
     x = (x - mean) / sigma;
     return gaussianConstant * Math.exp(-.5 * x * x) / sigma;
 };
-
-function draw() {
-
-    var data2 = received_data.bardata;
-    // Get student group assignment
-    var assignment = data2[data2.length-1];
-    data2.splice(-1,1);
-    var allCongruentData = data2.map(function(e) {
-        return e.Congruent;
-      });
-      var allIncongruentData = data2.map(function(e) {
-        return e.Incongruent;
-      });
-
-      var formatCount = d3.format(",.0f");
-
-      var svg = d3.select("svg"),
-        margin = {
-          top: 10,
-          right: 30,
-          bottom: 30,
-          left: 30
-        },
-        width = +svg.attr("width") - margin.left - margin.right,
-        height = +svg.attr("height") - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var x = d3.scaleLinear()
-        .rangeRound([0, width])
-        .domain([8, 36]);
-
-      var bins1 = d3.histogram()
-        .domain(x.domain())
-        .thresholds(x.ticks(40))
-        (allCongruentData);
-
-      var line = d3.line()
-          .x(function(d) { return x((d.x0 + d.x1)/2); })
-          .y(function(d) { return y(d.length); })
-          .curve(d3.curveCatmullRom.alpha(0.5));
-
-      var bins2 = d3.histogram()
-        .domain(x.domain())
-        .thresholds(x.ticks(40))
-        (allIncongruentData);
-
-      var y = d3.scaleLinear()
-        .domain([0, d3.max(bins1, function(d) {
-          return d.length;
-        })])
-        .range([height, 0]);
-
-      var bar1 = g.selectAll(".bar1")
-        .data(bins1)
-        .enter().append("g")
-        .attr("class", "bar1")
-        .attr("transform", function(d) {
-          return "translate(" + x(d.x0) + "," + y(d.length) + ")";
-        });
-
-      g.append("path")
-       .attr("d", line(bins1))
-       .attr("class", "bins1");
-
-      bar1.append("rect")
-        .attr("x", 0.5)
-        .attr("width", x(bins1[0].x1) - x(bins1[0].x0) - 1)
-        .attr("height", function(d) {
-          return height - y(d.length);
-        });
-
-
-      var bar2 = g.selectAll(".bar2")
-        .data(bins2)
-        .enter().append("g")
-        .attr("class", "bar2")
-        .attr("transform", function(d) {
-          return "translate(" + x(d.x0) + "," + y(d.length) + ")";
-        });
-
-      g.append("path")
-       .attr("d", line(bins2))
-       .attr("class", "bins2");
-
-      bar2.append("rect")
-        .attr("x", 0.5)
-        .attr("width", x(bins2[0].x1) - x(bins2[0].x0) - 1)
-        .attr("height", function(d) {
-          return height - y(d.length);
-        });
-
-      bar1.append("text")
-        .attr("dy", ".75em") // why?
-        .attr("y", 6)
-        .attr("x", (x(bins1[0].x1) - x(bins1[0].x0)) / 2)
-        .attr("text-anchor", "middle")
-        .text(function(d) {
-          return formatCount(d.length);
-        });
-
-      bar2.append("text")
-        .attr("dy", ".75em") // why?
-        .attr("y", 6)
-        .attr("x", (x(bins2[0].x1) - x(bins2[0].x0)) / 2)
-        .attr("text-anchor", "middle")
-        .text(function(d) {
-          return formatCount(d.length);
-        });
-
-      g.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
-
-      var legend = svg.append("g")
-        .attr("class", "legend")
-        .attr("transform", "translate(" + (width - 245) + "," + 40 + ")")
-        .selectAll("g")
-        .data(["Congruent", "Incongruent"])
-        .enter().append("g");
-
-      legend.append("text")
-        .attr("y", function(d, i) {
-          return i * 30 + 5;
-        })
-        .attr("x", 200)
-        .text(function(d) {
-          return d;
-        });
-
-      legend.append("rect")
-        .attr("y", function(d, i) {
-          return i * 30 - 8;
-        })
-        .attr("x", 167)
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("fill", function(d) {
-          if (d == "Congruent") {
-            return 'rgba(0,0,255,0.6';
-          } else {
-            return 'rgba(255,0,0,0.6';
-          }
-        });
-
-      // g.append("path")
-      //     .datum(data)
-      //     .attr("d", line);
-
-    }
 
 // function normalcdf(mean, sigma, x) {
 //     // see wolframalpha.com
