@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API_DIR = os.path.join(BASE_DIR,'api/')
-FILES_DIR = os.path.join(BASE_DIR, 'files')
+FILES_DIR = os.path.join(BASE_DIR, 'files/')
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,8 +45,6 @@ INSTALLED_APPS = [
     'background_task',
     'reversion',
     'rest_framework',
-    # 'django_auth_lti',
-    #'django_app_lti',
 
 ]
 
@@ -60,7 +58,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
     'reversion.middleware.RevisionMiddleware',
-    # 'django_auth_lti.middleware.LTIAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'canvas_lti.urls'
@@ -95,30 +92,6 @@ DATABASES = {
 }
 
 
-# # Password validation
-# # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
-#
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
-
-# # Add to authentication backends (for django-auth-lti)
-# AUTHENTICATION_BACKENDS = [
-#     'django.contrib.auth.backends.ModelBackend',
-#     'django_auth_lti.backends.LTIAuthBackend',
-# ]
-
 # Add LTI configuration settings (for django-app-lti)
 LTI_SETUP = {
     "TOOL_TITLE": "Coach3",
@@ -134,21 +107,18 @@ LTI_SETUP = {
                 "default": "enabled",
                 "text": "Coach (localhost)",
                 "visibility": "public",
-                "url": "http://localhost:8000/lti/launch",
+                "url": "https://agile007.science.uva.nl/lti/launch",
             },
             "course_home_sub_navigation": {
                 "enabled": "true",
                 "default": "enabled",
                 "text": "Coach (localhost)",
                 "visibility": "public",
-                "url": "http://localhost:8000/lti/launch",
+                "url": "https://agile007.science.uva.nl/lti/launch",
             }
         }
     }
 }
-
-# LTI_SECRET = "69dc913725629f46f9a4324490a61ca82cdb360f354a7c2ca5d6b21994f5ddc0"
-# LTI_KEY = "9bd2b1cfd3857f5274e8fd7ec428857e"
 
 LTI_SECRET = '4339900ae5861f3086861ea492772864'
 LTI_KEY = '0cd500938a8e7414ccd31899710c98ce'
@@ -158,11 +128,7 @@ BASELINK = 'http://localhost:8080'
 
 #AUTH_USER_MODEL = "iki_lti.User"
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ),
-# }
+
 
 
 # Internationalization
@@ -186,7 +152,7 @@ STATIC_URL = '/static/'
 #LOGIN_REDIRECT_URL = 'index'
 
 #Background processes
-BACKGROUND_TASK_RUN_ASYNC = True
+BACKGROUND_TASK_RUN_ASYNC = False
 MAX_ATTEMPTS = 5
 
 

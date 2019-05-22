@@ -2,18 +2,15 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.urls import reverse
 
-import enum
-
 from iki_lti import factory
 from iki.models import User
 from django.views.decorators.csrf import csrf_exempt
 from ims_lti_py.tool_config import ToolConfig
 from django.views.generic import View
 import urllib.request, urllib.parse, urllib.error
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from utils.AccessRights import has_access
-from utils.CanvasHelper import do_update_db
 from utils.dataset import get_goal_for_student
 
 
@@ -21,22 +18,6 @@ from utils.dataset import get_goal_for_student
 
 LTI_SETUP = settings.LTI_SETUP
 INITIALIZE_MODELS = LTI_SETUP.get('INITIALIZE_MODELS', False)
-
-
-class LTI_STATES(enum.Enum):
-    """VUE ENTRY STATE."""
-    KEY_ERR = '-2'
-    BAD_AUTH = '-1'
-
-    NO_USER = '0'
-    LOGGED_IN = '1'
-
-    NO_COURSE = '0'
-    NO_ASSIGN = '1'
-    NEW_COURSE = '2'
-    NEW_ASSIGN = '3'
-    FINISH_T = '4'
-    FINISH_S = '5'
 
 
 @csrf_exempt
@@ -53,10 +34,6 @@ def lti_launch(request):
     secret = settings.LTI_SECRET
     key = settings.LTI_KEY
 
-    # try:
-    #     factory.OAuthRequestValidater.check_signature(key, secret, request)
-    # except (oauth2.Error, ValueError):
-    #     return redirect(factory.create_lti_query_link(QueryDict.fromkeys(['state'], LTI_STATES.BAD_AUTH.value)))
     factory.OAuthRequestValidater.check_signature(key, secret, request)
 
     launch_redirect_url = LTI_SETUP['LAUNCH_REDIRECT_URL']
@@ -65,6 +42,7 @@ def lti_launch(request):
     if has_access(email):
         lti_user_id = params['user_id']
         users = User.objects.filter(lti_id=lti_user_id)
+        request.session['pp_redarekt'] = True
 
         if users.count() > 0:
             user = users[0]
@@ -77,13 +55,15 @@ def lti_launch(request):
             # do_update_db(user.iki_user_id)
             return redirect("iki:index", user_id=user.iki_user_id)
     else:
-        # return redirect("iki:access_refused")
         return render(request, 'iki/access_refused.html')
 
 
 
 
 class LTIToolConfigView(View):
+    """
+    Django view for the generation of the xml config file used when creating a new app in canvas
+    """
     LAUNCH_URL = LTI_SETUP.get('LAUNCH_URL', 'lti:launch')
     """
     Outputs LTI configuration XML for Canvas as specified in the IMS Global Common Cartridge Profile.

@@ -23,44 +23,13 @@ API_KEY = open(settings.API_DIR+'api_key.txt', 'r').readlines()[0].strip()
 canvas = Canvas(API_URL, API_KEY)
 
 
-# def current_scores(course):
-#     """
-#     Deprecated, use current_grade instead.
-#     :param course:
-#     :return:
-#     """
-#     " Returns list with all student average scores (ignoring ungraded assignments)"
-#     # @TODO: get weight of assignment using assignment_id, add to dict
-#     course_grades = {}
-#     for enr in course.get_enrollments():
-#         if enr.type == 'StudentEnrollment':
-#             course_grades[enr.user_id] = enr.grades['current_score']
-#             # print(enr.grades['current_score'])
-#
-#     return course_grades
-#
-#
-# def current_grade(course):
-#     assignments = course.get_assignments()
-#     users = course.get_users(enrollment_type='student')
-#     weighted_grade = {}
-#
-#     for student in users:
-#         total_weight = 0
-#         grade = 0
-#         for assignment in assignments:
-#             if assignment.grading_type == 'gpa_scale' and assignment.get_submission(student).grade:
-#                 assignment_id = assignment.assignment_group_id
-#                 weight = float(course.get_assignment_group(assignment_id).group_weight)
-#                 total_weight += weight
-#                 grade += float(assignment.get_submission(student).grade)*weight
-#         if total_weight > 0:
-#             weighted_grade[student.id] = grade/total_weight
-#     print(weighted_grade)
-#     return weighted_grade
-
-
 def get_user_scores(course, user):
+    """
+    get the grades of the students so far in a course
+    :param course: the course to fetch the grades from. course is an instance of Canvas.Course
+    :param user: the user for which to fetch the grades. user is an instance of Canvas.User
+    :return: a dataframe with the names of the assignments as colums names and grades in the row.
+    """
 
     # todo: grades are currently sorted by groups assignment (alphabetically) and then by date within the group.
     #  Find a way such that it is ordered only by release date.
@@ -84,63 +53,38 @@ def get_user_scores(course, user):
                 return []
         elif assignment.get_submission(student_id).grade:
             grades[assignment.name] = [float(assignment.get_submission(student_id).grade)]
-            # grades.append(float(assignment.get_submission(student_id).grade))
             assessments += 1
-        # print(assignment.grading_type)
 
 
     return grades
-    # return grades
-
-
-def frequency_count(gradedict, student_id, nr_bins=20, minn=0.0, maxx=10.0):
-    " Creates bins for histogram plot of grades. Finds correct student assignment."
-    ret = []
-    data = []
-    binsize = (maxx - minn) / float(nr_bins)
-    student_bucket = []
-    # construct bins
-    # each bin consist of a start position and end position and a zero value(?)
-    # QUESTION: why the null value?
-    # each bin represents a grade on the x-axis
-    # bins are stored in the ret variable
-    for x in range(0, nr_bins):
-        start = minn + x * binsize
-        ret.append([start, start+binsize, 0])
-        data.append({'bucket': start+binsize, 'size': 0})
-        # QUESTION: why do we need the ret array?
-    # assign items to bin
-    for item in list(gradedict.values()):
-        for i, binn in enumerate(ret):
-            if item is not None and binn[0] <= item < binn[1]:
-                    data[i]['size'] += 1
-            # sets aside the student grade in another student_bucket
-            # NOTE: the student grade is still included in the general bucket
-            # as it will be included in the average grade calculation
-            if student_id in gradedict.keys():
-                if binn[0] <= gradedict[student_id] < binn[1]:
-                    student_bucket = data[i]['bucket']
-            else: student_bucket = 0
-
-    data.append({'assignment': student_bucket})
-    return data
 
 
 
 
 
 def update_db(student_id):
+    """
+    Updates the model of a student if her/his grade or number of assignments graded have changed
+    :param student_id: the id of the student
+    :return:
+    """
     user = User.objects.filter(iki_user_id=student_id)[0]
     course_id = user.course.iki_course_id
     course = canvas.get_course(course_id)
     grades = get_user_scores(course, user)
+    canvas_av = current_grade(course)
 
-    if user.assessments != grades.shape[1]:
+    if user.assessments != grades.shape[1] or canvas_av[user.iki_user_id] != float(user.av_grade):
         do_update_db(student_id)
-    print('task done')
-    print(datetime.datetime.now())
+
+
 
 def do_update_db(student_id):
+    """
+    A helper to the update_db function. Is called to perform the update.
+    :param student_id: the id of the student
+    :return:
+    """
     user = User.objects.filter(iki_user_id=student_id)[0]
     course_id = user.course.iki_course_id
     course = canvas.get_course(course_id)
@@ -160,7 +104,7 @@ def do_update_db(student_id):
 
         user.av_grade = current_score[int(student_id)]
 
-        comparison_group, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case = make_comparison_group(user)
+        comparison_group, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case = make_comparison_group(user, current_score[int(student_id)])
 
 
         user.comparison_group = json.dumps(comparison_group)
@@ -178,14 +122,18 @@ def do_update_db(student_id):
         user.save()
 
         # reversion.set_user(request.user)
-        reversion.set_comment("Created revision 1")
+        reversion.set_comment("updated at {}".format(datetime.datetime.now()))
 
 @background()
 def general_db_update():
+    """
+    Calls update_db for all the student registered in the database.
+    :return:
+    """
     users = User.objects.all()
     for user in users:
         update_db(user.iki_user_id)
-    print('for all students')
+    print('task done at'.format(datetime.datetime.now()))
 
 
 def get_data(user):
@@ -201,29 +149,17 @@ def get_data(user):
     course = canvas.get_course(course_id)
 
     student_name = user.name
-    # todo: check that for 2 users the data is updated for both
-    # for student in course.get_users(enrollment_type='student'):
-    #     print(student)
-    #     print(vars(student))
-    #     update_db(student.id, repeat=60)
-    # update_db(student_id)
+
     est_grade = user.grade_pred
     est_sd = user.grade_sigma
     gaussdata = {"weighted_grade": est_grade, "sigma": est_sd}
-    # comparison_groups = user.comparison_group
     if user.comparison_group =='nothing':
-        # current_score = current_grade(course)
-        # if not student_id in current_score.keys():
-        #     current_score[student_id] = 0
-        # comparison_groups = frequency_count(current_score, student_id)
         do_update_db(student_id)
-    # bardata = json.loads(user.comparison_group)
-    #     return {"bardata": comparison_groups, "gaussdata": gaussdata, "student_name": student_name}
-    # print('comparison group')
-    # print(comparison_groups)
+
     assert type(user.comparison_group) == str, 'the type of the user comparison is not str, it is {}'.format(type(user.comparison_group))
     bardata = json.loads(user.comparison_group)
-    comp_curve = ({'comp_mean': user.comparison_mean, 'comp_std': user.comparison_std})
+    # round the mean value of the comparison group to the closest .25/.75
+    comp_curve = ({'comp_mean': round(user.comparison_mean * 4) / 4, 'comp_std': user.comparison_std})
 
     return {"bardata": bardata, "gaussdata": gaussdata, "comp_curve": comp_curve}
 

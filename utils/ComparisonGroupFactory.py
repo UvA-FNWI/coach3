@@ -42,7 +42,7 @@ def get_same_goal_set(student_data, size, goal_grade):
     return peers['av'].values, window
 
 
-def make_comparison_set(start_set, end_set, l_b, u_b, set_size):
+def make_comparison_set(start_set, end_set,average,l_b, u_b, set_size):
     """
     From a set of students with similar goals, makes a comparison set, such that the grand average grade of the set
     is equal to mean and the size of the set is set_size
@@ -54,8 +54,12 @@ def make_comparison_set(start_set, end_set, l_b, u_b, set_size):
     """
 
     # assert len(end_set == 7), "The size of the end set is too small. Must contain 7 elements"
+    better_peers = end_set[end_set > average]
+    worse_peers = end_set[end_set < average]
+    worse_eq_peers = end_set[end_set <= average]
 
-    if l_b <= round(np.mean(end_set), 2) <= u_b and len(end_set) == set_size:
+    if average+l_b <= round(np.mean(end_set), 2) <= average+u_b and len(end_set) == set_size and \
+            len(better_peers)>len(worse_eq_peers) and len(worse_peers)>=1 and len(worse_eq_peers)>=2:
         return end_set
 
     # assert len(start_set) > 0, "Could not find a subset from the set given"
@@ -73,15 +77,27 @@ def make_comparison_set(start_set, end_set, l_b, u_b, set_size):
         min_indices = end_set.argsort()[3:]
         min_index = np.argmin(end_set)
         end_set = np.delete(end_set, min_index)
-    return make_comparison_set(start_set, end_set, l_b, u_b, set_size)
+    return make_comparison_set(start_set, end_set, average, l_b, u_b, set_size)
 
 
 def dist_from_top(peers, average):
+    """
+    Gives the rank of a student from the top
+    :param peers: all the students in the course, for which we can use the data
+    :param average: the average grade of the student
+    :return: the position in the rank from the top
+    """
     dist = len([peer for peer in peers['av'] if peer > average])
     return dist
 
 
 def dist_from_bottom(peers, average):
+    """
+        Gives the rank of a student from the bottom
+        :param peers: all the students in the course, for which we can use the data
+        :param average: the average grade of the student
+        :return: the position in the rank from the bottom
+        """
     dist = len([peer for peer in peers['av'] if peer < average])
     return dist
 
@@ -116,7 +132,17 @@ def get_special_set(peers, average, isTop, isOther, size):
 
 
 def get_set(average, goal_grade, av_goal_df, set_size):
-
+    """
+    General function that finds a comparison set for a given average, goal grade and size. Handles edge cases if no
+    comparison could be found.
+    :param average: the average grade of a student
+    :param goal_grade: the goal grade of a student
+    :param av_goal_df: a dataframe containing the average and goal grades of all students in the course who consented to
+    share these data
+    :param set_size: the size of the comparison set
+    :return: the comparison set in the form of an array, the window from which the set was created, whether a solution
+    has been found, and in which edge case (if any) the user falls in.
+    """
     # solution = []
     for i in range(10, 50):
         peers, w = get_same_goal_set(av_goal_df, i, goal_grade)
@@ -128,10 +154,9 @@ def get_set(average, goal_grade, av_goal_df, set_size):
             random.shuffle(peers)
             start_set = peers[set_size:]
             end_set = peers[:set_size]
-            solution = make_comparison_set(start_set, end_set, average+0.5, average+1.0, set_size)
-            better_peer = solution[solution>average]
-            worse_peers = solution[solution<=average]
-            if np.sum(solution) > 0 and len(better_peer)==4:
+            solution = make_comparison_set(start_set, end_set, average, 0.5, 1.0, set_size)
+
+            if np.sum(solution) > 0:
                 has_solution = True
                 edge_case = 'no'
                 return solution, w, has_solution, edge_case
@@ -149,52 +174,30 @@ def get_set(average, goal_grade, av_goal_df, set_size):
         else:
             isTop = False
             isOther = False
+            edge_case = 'other'
         solution = get_special_set(av_goal_df, average, isTop, isOther, set_size)
         has_solution = True
-        edge_case = 'other'
         return  solution, 0, has_solution, edge_case
     has_solution = False
     edge_case = 'error'
     return np.zeros(set_size), w, has_solution, edge_case
 
 
-# def frequency_count_comp(grades, user_grade, nr_bins=20, minn=0.0, maxx=10.0):
-#     " Creates bins for histogram plot of grades. Finds correct student assignment."
-#     ret = []
-#     data = []
-#     binsize = (maxx - minn) / float(nr_bins)
-#     student_bucket = []
-#     # construct bins
-#     # each bin consist of a start position and end position and a zero value(?)
-#     # QUESTION: why the null value?
-#     # each bin represents a grade on the x-axis
-#     # bins are stored in the ret variable
-#     for x in range(1, nr_bins):
-#         start = minn + x * binsize
-#         ret.append([start, start+binsize, 0])
-#         data.append({'bucket': start+binsize, 'size': 0})
-#         # QUESTION: why do we need the ret array?
-#     # assign items to bin
-#     for item in grades:
-#         for i, binn in enumerate(ret):
-#             if item is not None and binn[0] <= item < binn[1]:
-#                     data[i]['size'] += 1
-#             # sets aside the student grade in another student_bucket
-#             # NOTE: the student grade is still included in the general bucket
-#             # as it will be included in the average grade calculation
-#             if binn[0] <= user_grade < binn[1]:
-#                 student_bucket = data[i]['bucket']
-#
-#     data.append({'assignment': student_bucket})
-#     return data
 
-
-def make_comparison_group(user):
+def make_comparison_group(user, average):
+    """
+    Gets the comparison set and other info from the get_set function and turns it into a JSON to be used by the index page.
+    Additionally computes the mean and std of the comparison set and how far the student is from that mean.
+    :param user: An instance of iki.User
+    :param average: the new average grade of that user
+    :return: JSOn version of the comparison set, has_comparison, solution_mean, solution_std, solution_mean_distance,
+    edge_case.
+    """
     # alternatively, get the goal grade from the "body" attribute from the submission for an assignment in which we ask
     # for the goal grade. And couple that with the current_score function to get the average-goal tuple
 
     goal = user.goal_grade
-    average = user.av_grade
+    # average = user.av_grade
 
 
     av_goal_df = get_av_goal_data(user)
@@ -208,6 +211,9 @@ def make_comparison_group(user):
     return group_as_frequency, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case
 
 
+
+############# This part is not used
+
 def set_goal_grade(goal, student_id):
     user = User.objects.filter(iki_user_id=student_id)[0]
     user.goal_grade = float(goal)
@@ -217,8 +223,6 @@ def set_goal_grade(goal, student_id):
     user.save()
     # make_comparison_group(user)
 
-
-############# This part is not used
 
 def make_set_for_diagram(user):
     """

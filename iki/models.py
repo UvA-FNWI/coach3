@@ -8,6 +8,10 @@ import json
 
 
 class Course(models.Model):
+    """
+    Course is an entity in the database representing the course in which the tool is user. It has the following attribute:
+    - iki_course_id: the canvas id of the course
+    """
     iki_course_id = models.CharField(max_length=200)
     # startdate = models.DateField(
     #     null=False,
@@ -18,13 +22,28 @@ class Course(models.Model):
 
 
 class User(models.Model):
-    """User.
-
-    User is an entity in the database with the following features:
+    """
+    User is an entity in the database representing the student using the tool, with the following attributes:
     - name: full name of the user
     - email: email of the user.
     - lti_id: the DLO id of the user.
     - iki_user_id: The id of the user for the course
+    - course = an entity of Course, representing the course in which the user is using the tool
+    - av_grade = the current average grade of the user
+    - grade_pred = predicted final grade
+    - grade_sigma = standard deviation of the predicted final grade
+    - assessments = number of assessments that have been graded so far
+    - comparison_group = a JSON containing the number of peers with a certain grade for each grade
+    - goal_grade = the goal grade of the user
+    - has_comparison_group = Boolean if a comparison group could be made for the user with current average grade and
+    goal grade
+    - comparison_distance_mean = the distance between the average of the user and the mean grade of the comparison group
+    - comparison_mean = the mean grade of the comparison group
+    - comparison_std = the standard deviation of the grade distribution of the comparison group
+    - edg_case = whether the user falls into an edge case. "top' if in the top 7, "bottom" if in the bottom 7, "other"
+    if other, "no" if it does not belong to an edge case, "error" otherwise.
+    - log_count = a log of how many time the user has connected to the tool.
+    - history = in order to keep a history of the changes
     """
 
     name = models.CharField(null=False, max_length=200)
@@ -38,8 +57,6 @@ class User(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     av_grade = models.FloatField(default=0)
-
-    # grades = ListTextField(base_field=models.IntegerField(), null=True)
 
     grade_pred = models.FloatField(default=0)
 
@@ -65,19 +82,15 @@ class User(models.Model):
 
     history = HistoricalRecords()
 
-    # To Add: average_grade, predicted_average_grade, is_promotion_focused
 
     def __str__(self):
         return self.name
 
     def create_user(request):
-        """Create a user.
-
-        Arguments:
-        name -- full name of the student
-        password -- password of the user to login
-        email -- mail of the user (default: none)
-        lti_id -- to link the user to canvas
+        """
+        Creates a user. Sets a value for the name, email, lti_id, iki_user_id, course, comparison group and goal grade
+        :param: a request
+        :return: an instance of User
         """
 
         course_id = request['custom_canvas_course_id']
@@ -96,4 +109,8 @@ class User(models.Model):
         return user
 
     def get_user_id(self):
+        """
+        get the user_id of the user
+        :return: iki_user_id
+        """
         return self.iki_user_id

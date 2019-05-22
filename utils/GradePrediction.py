@@ -5,6 +5,9 @@ from typing import List
 import pprint
 
 
+###DISCONTINUED!!##
+
+
 conf_int = 10
 q = 0.1
 bigK = 11

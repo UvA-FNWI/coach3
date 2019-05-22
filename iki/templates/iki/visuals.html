@@ -25,6 +25,25 @@
         font-size: 12px;
         color: red;
     }
+
+    .orangeText {
+        color: #F5B041;
+        font-weight: bold;
+    }
+    .blueText{
+        color: #5DADE2;
+        font-weight: bold;
+    }
+    .redText{
+        color: red;
+        font-weight: bold;
+    }
+    p.legend{
+        position: absolute;
+        left:50px;
+        font-size: 12px;
+    }
+
     </style>
 
 </head>
@@ -55,10 +74,10 @@ function display_bar(){
     {#var mean1 = params.comp_mean;#}
     var mean1 = params.comp_mean;
     var sigma1 = params.comp_std;
-    var mean2 = +Math.log10(100000*mean1)/mean1;
 
     //for some reason peak is of the mean is shifted by -1.5 when drawn. Add +3 to the mean to compensate.
     var comparison_curve = getDataBar(mean1,sigma1);
+    {#comparison_curve_2 = {"p": 5, "q":2};#}
 
     // Get total number of students
     var total = 0
@@ -90,9 +109,48 @@ function display_bar(){
         y = d3.scaleLinear().rangeRound([height, 0]);
 
 
+    var abc = [0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,
+                0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1,
+                1.05,1.1,1.15,1.2,1.25,1.3,1.35,1.4,1.45,1.5,
+                1.55,1.6,1.65,1.7,1.75,1.8,1.85,1.9,1.95,2,
+                2.05,2.1,2.15,2.2,2.25,2.3,2.35,2.4,2.45,2.5,
+                2.55,2.6,2.65,2.7,2.75,2.8,2.85,2.9,2.95,3,
+                3.05,3.1,3.15,3.2,3.25,3.3,3.35,3.4,3.45,3.5,
+                3.55,3.6,3.65,3.7,3.75,3.8,3.85,3.9,3.95,4,
+                4.05,4.1,4.15,4.2,4.25,4.3,4.35,4.4,4.45,4.5,
+                4.55,4.6,4.65,4.7,4.75,4.8,4.85,4.9,4.95,5,
+                5.05,5.1,5.15,5.2,5.25,5.3,5.35,5.4,5.45,5.5,
+                5.55,5.6,5.65,5.7,5.75,5.8,5.85,5.9,5.95, 6,
+                6.05,6.1,6.15,6.2,6.25,6.3,6.35,6.4,6.45,6.5,
+                6.55,6.6,6.65,6.7,6.75,6.8,6.85,6.9,6.95,7,
+                7.05,7.1,7.15,7.2,7.25,7.3,7.35,7.4,7.45,7.5,
+                7.55,7.6,7.65,7.7,7.75,7.8,7.85,7.9,7.95,8,
+                8.05,8.1,8.15,8.2,8.25,8.3,8.35,8.4,8.45,8.5,
+                8.55,8.6,8.65,8.7,8.75,8.8,8.85,8.9,8.95,9,
+                9.05,9.1,9.15,9.2,9.25,9.3,9.35,9.4,9.45,9.5,
+                9.55,9.6,9.65,9.7,9.75,9.8,9.85,9.9,9.95,10];
 
-    x.domain(data.map(function(d) { return d.bucket; }));
-    {#x.domain([0,1,2,3,4,5,6,7,8,9,10]);#}
+    var abc = [1,
+                1.25,1.5,
+                1.75,2,
+                2.25,2.5,
+                2.75,3,
+                3.25,3.5,
+                3.75,4,
+                4.25,4.5,
+                4.75,5,
+                5.25,5.5,
+                5.75,6,
+                6.25,6.5,
+                6.75,7,
+                7.25,7.5,
+                7.75,8,
+                8.25,8.5,
+                8.75,9,
+                9.25,9.5,
+                9.75,10];
+    {#x.domain(data.map(function(d) { return d.bucket; }));#}
+    x.domain(abc);
     y.domain([0,max]);
 
 
@@ -103,16 +161,24 @@ function display_bar(){
             {#  return d[0];#}
             {#  })),#}
             {#.domain([1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10]),#}
-            .domain(data.map(function(d) { return d.bucket; })),
+            .domain(abc),
         yScale_b = d3.scaleLinear()
                 .rangeRound([height, 0])
                 .domain([0, 0.7]);
 
 
     var line_b = d3.line()
-      .x(function(d, i) { return xScale_b(d[0]+2); })
+      .x(function(d, i) { return x(d[0]); })
       .y(function(d) { return yScale_b(d[1]); })
       .curve(d3.curveLinear);
+
+    var line_c = d3.line()
+      .x(function(d) {
+          return x(d.q);
+      })
+      .y(function(d) {
+          return y(d.p);
+      });
 
 
 
@@ -125,6 +191,7 @@ function display_bar(){
 
     var g =  svg_Bar.append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        {#.call(d3.legend);#}
 
     g.append("text")
       .attr("x", (width / 2))
@@ -151,6 +218,13 @@ function display_bar(){
       .attr("y", -25)
       .text("Aantal studenten");
 
+    {#var legend = svg_Bar.append("g")#}
+    {#    .attr("class", "legend")#}
+    {#    .attr("transform","translate(50,30)")#}
+    {#    .style("font-size","12px")#}
+    {#    .call(d3.legend)#}
+
+
     {#var g = svg_Bar.append("g")#}
     {#    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");#}
 
@@ -158,7 +232,7 @@ function display_bar(){
     g.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).ticks(10));
+        .call(d3.axisBottom(x).tickValues(x.domain().filter(function(d,i){ return !(i%4)})));
 
     // Y axis
     g.append("g")
@@ -171,8 +245,11 @@ function display_bar(){
         .attr("text-anchor", "end")
         .text("size");
 
+
+
     if (assignment.assignment > 0) {
         // Bars of other students
+
         var bar1 = g.selectAll("rect")
             .data(data)
             .enter().append("g");
@@ -183,12 +260,12 @@ function display_bar(){
             .style("stroke", "#2E86C1")
             .attr("fill", "#5DADE2")
             .attr("x", function (d) {
-                return x(d.bucket) + 1;
+                return x(d.bucket)- x.bandwidth()/6;
             })
             .attr("y", function (d) {
                 return y(d.size);
             })
-            .attr("width", x.bandwidth() - 2)
+            .attr("width", x.bandwidth()*1.5)
             .attr("height", function (d) {
                 return height - y(d.size);
             });
@@ -201,20 +278,39 @@ function display_bar(){
             .style("stroke", "#D68910")
             .attr("fill", "#F5B041")
             .attr("x", function (d) {
-                return x(assignment.assignment) + 2.5;
+                return x(assignment.assignment) - x.bandwidth()/6;
             })
             .attr("y", function (d) {
                 return y(1);
             })
-            .attr("width", x.bandwidth() - 5)
+            .attr("width", x.bandwidth()*1.5)
             .attr("height", function (d) {
                 return height - y(1);
             });
 
-        bar1.append("path")
-          .attr("class", "line")
-          .attr("d", line_b(comparison_curve));
+        bar1.append("rect")
+            .attr("class", "bar")
+            {#.attr("border", 0)#}
+            {#.style("stroke", "#2E86C1")#}
+            .attr("fill", "red")
+            .attr("fill-opacity","0.05")
+            .attr("x", function (d) {
+                return x(mean1) + x.bandwidth()/2-0.5;
+            })
+            .attr("y", function (d) {
+                return y(max);
+            })
+            .attr("width", 2)
+            .attr("height", function (d) {
+                return height - y(max);
+            });
+
+        {#bar1.append("path")#}
+        {#  .attr("class", "line")#}
+        {#  .attr("d", line_b(comparison_curve));#}
         {#.attr("d", line2(dataset));#}
+
+
     }
 
 
@@ -268,14 +364,14 @@ function display_Gaussian() {
     .attr("y", height+30)
     .text("Eindcijfer");
 
-  // X axis passprob
-  svg_Gauss.append("text")
-    .attr("class", "x label")
-    .attr("text-anchor", "end")
-    .attr("x", width/2)
-    .attr("y", height+50)
-    // .text("Geschatte kans op eindcijfer > 5.5: "+passProb*100+"%");
-    .text("Behoudens ondergrens eisen.")
+  {#// X axis passprob#}
+  {#svg_Gauss.append("text")#}
+  {#  .attr("class", "x label")#}
+  {#  .attr("text-anchor", "end")#}
+  {#  .attr("x", width/2)#}
+  {#  .attr("y", height+50)#}
+  {#  // .text("Geschatte kans op eindcijfer > 5.5: "+passProb*100+"%");#}
+  {#  .text("Behoudens ondergrens eisen.")#}
 
   // Y axis label
   svg_Gauss.append("text")
@@ -394,8 +490,12 @@ display_Gaussian()
 </script>
 <body>
 
-<br>
-<br>
+<p class="legend">
+    <span class="orangeText">Oranje</span>: Jij<br>
+    <span class="blueText">Blauw</span>: Klasgenoten med gelijke doelen <br>
+    <span class="redText">Rood</span>: Mean van de cijfers van de klasgenoten op het plaatje
+</p>
+
 
 
 {#{%  if not has_comparison_group %}#}

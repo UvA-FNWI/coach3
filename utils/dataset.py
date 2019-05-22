@@ -5,14 +5,19 @@ from canvasapi import Canvas
 from utils.AccessRights import can_use_data, load_access_file
 from django.conf import settings
 
-API_URL = open(settings.BASE_DIR+'api_url.txt', 'r').readlines()[0].strip()
+API_URL = open(settings.API_DIR+'api_url.txt', 'r').readlines()[0].strip()
 # Canvas API key
-API_KEY = open(settings.BASE_DIR+'api_key.txt', 'r').readlines()[0].strip()
+API_KEY = open(settings.API_DIR+'api_key.txt', 'r').readlines()[0].strip()
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 
 
 def create_training_set(n_assessments):
+    """
+    Loads the previous years grades and final grades from csv files and turns it into trainable data
+    :param n_assessments: how many assignments have been graded so far for a user
+    :return: train_data containing the historical assignment grades, train_grades containing the historical final grades.
+    """
     # todo: change position of presentation assignments accordingly to the release date of the grade
     data2018 = pd.read_csv("grades2018.csv")
     data2017 = pd.read_csv("grades2017.csv")
@@ -27,16 +32,30 @@ def create_training_set(n_assessments):
     return train_data, train_grades
 
 def get_goals():
+    """
+    Get the goal grades of students in the course who gave consent to sharing it.
+    :return: a dataframe containing the email (to identify the user), and goal grade of the students in the course.
+    """
     data = load_access_file()
     data = data[data['access']=='y']
     return data[['email', 'goal']]
 
 def get_goal_for_student(email):
+    """
+    Get the goal grade of a specific student given his/her email address
+    :param email: the email address of the student
+    :return: the goal grade of the student
+    """
     data = get_goals()
     return data[data['email']==email]['goal'].values[0]
 
 
 def current_grade(course):
+    """
+    Get the average grade of all students in the course whose data can be used.
+    :param course: the course from which to get the grades.
+    :return: a dict with student_id as key and average grade as value.
+    """
     assignments = course.get_assignments()
     users = course.get_users(enrollment_type='student')
     weighted_grade = {}
@@ -58,6 +77,15 @@ def current_grade(course):
 
 
 def get_av_goal_data(user: User) -> pd.DataFrame:
+    """
+    Generates a dataframe containing the goal grade and average grade of all the students in the course who gave consent.
+    Note: In the test version, a dummy set is generated
+    :param user: the subject in the course
+    :return: a dataframe containing goal grades and average grades.
+    """
+
+    # TODO: Make the code more logial and put iki.Course as argument instead of iki.User
+
     course_id = user.course.iki_course_id
     course = canvas.get_course(course_id)
     users = course.get_users(enrollment_type='student')
@@ -81,7 +109,8 @@ def get_av_goal_data(user: User) -> pd.DataFrame:
 
             goal_grade = goal_grades[goal_grades['email']==email]['goal'].values[0]
             av_goal_df = av_goal_df.append({'av': av_grade, 'goal': goal_grade}, ignore_index=True)
-    print(av_goal_df)
+    # print(av_goal_df)
+
     # return av_goal_df
     # use dummy data for test phase
     return get_dummy_data()
@@ -92,6 +121,10 @@ def get_av_goal_data_true(user: User) -> pd.DataFrame:
 
 
 def get_dummy_data():
+    """
+    Generates a dummy dataset from a csv file.
+    :return: a dummy data frame.
+    """
     goal_data = pd.read_csv('goal_grade.csv')
     # print(goal_data)
     return goal_data

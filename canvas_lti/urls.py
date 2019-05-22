@@ -26,10 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('iki/', include(('iki.urls', 'iki'), namespace="iki")),
     path('lti/', include(('iki_lti.urls', 'lti'), namespace = 'lti')),
-     #url(r'^lti/', include(('iki_lti.urls', 'lti'), namespace="lti")),
-     # url(r'^lti/', include((django_app_lti.urls, 'lti'), namespace="lti")),
-     # #path('accounts/login/', include(django_app_lti.urls))
-     # path('accounts/', include('django.contrib.auth.urls')),
 ]
 
-general_db_update(repeat=60*10)
+general_db_update(repeat=60*30)

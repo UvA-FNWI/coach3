@@ -4,6 +4,13 @@ from sklearn.externals import joblib
 
 
 def generate_model_fit(train_values, train_targets, n_assessments):
+    """
+    Fits the model using Bayesian Linear regression
+    :param train_values:
+    :param train_targets:
+    :param n_assessments:
+    :return:
+    """
     model = BayesianRidge()
     model.fit(train_values, train_targets)
 
