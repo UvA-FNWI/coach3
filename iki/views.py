@@ -36,13 +36,13 @@ def index(request, user_id):
     #consent = given_consent(student)
     # consent=True
 
-    # if 'pp_redarekt' in request.session:
-    if True:
+    if 'pp_redarekt' in request.session:
+    # if True:
 
         # if consent:
         template = loader.get_template('iki/visuals.html')
         # Obtain data using CanvasHelper get_data function and send to html
-        # del request.session['pp_redarekt']
+        del request.session['pp_redarekt']
         return render(request, 'iki/visuals.html', context={'data':json.dumps(get_data(student)),
                                                             'student_id': student_id,
                                                             "has_comparison_group": has_comparison_group})

@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import json
+
+# with open('/etc/config.json') as config_file:
+# 	config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -18,11 +22,14 @@ API_DIR = os.path.join(BASE_DIR,'api/')
 FILES_DIR = os.path.join(BASE_DIR, 'files/')
 
 
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '0v-n_tq)-s8f$8%2=nw+f41do*1wg6d*ja=+m2dm56n=fl&trt'
+# SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -123,8 +130,12 @@ LTI_SETUP = {
 LTI_SECRET = '4339900ae5861f3086861ea492772864'
 LTI_KEY = '0cd500938a8e7414ccd31899710c98ce'
 
+#LTI_SECRET = config['LTI_SECRET']
+#LTI_KEY = config['LTI_KEY']
+
 
 BASELINK = 'http://localhost:8080'
+# BASELINK = 'https://agile007.science.uva.nl'
 
 #AUTH_USER_MODEL = "iki_lti.User"
 
@@ -148,11 +159,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 #LOGIN_REDIRECT_URL = 'index'
 
 #Background processes
 BACKGROUND_TASK_RUN_ASYNC = False
 MAX_ATTEMPTS = 5
+
+X_FRAME_OPTIONS = 'ALLOW'
 
 
