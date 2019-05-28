@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="73888ac0-0c15-4560-96ba-6900f1884168" name="agile" url="http://agile007.science.uva.nl">
-        <fileTransfer host="agile007.science.uva.nl" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" accessType="SFTP" keyPair="true">
+        <fileTransfer host="agile007.science.uva.nl" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="" accessType="SFTP" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

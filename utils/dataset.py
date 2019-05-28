@@ -19,9 +19,9 @@ def create_training_set(n_assessments):
     :return: train_data containing the historical assignment grades, train_grades containing the historical final grades.
     """
     # todo: change position of presentation assignments accordingly to the release date of the grade
-    data2018 = pd.read_csv("grades2018.csv")
-    data2017 = pd.read_csv("grades2017.csv")
-    data2019 = pd.read_csv("grades2017.csv")
+    data2018 = pd.read_csv(settings.FILES_DIR+"grades2018.csv")
+    data2017 = pd.read_csv(settings.FILES_DIR+"grades2017.csv")
+    data2019 = pd.read_csv(settings.FILES_DIR+"grades201.csv")
 
     data = np.append(np.append(data2018.values, data2017.values, 0), data2019.values, 0)
     train_grades = data[:, -1]
@@ -125,7 +125,7 @@ def get_dummy_data():
     Generates a dummy dataset from a csv file.
     :return: a dummy data frame.
     """
-    goal_data = pd.read_csv('goal_grade.csv')
+    goal_data = pd.read_csv(settings.FILES_DIR+'goal_grade.csv')
     # print(goal_data)
     return goal_data
 
