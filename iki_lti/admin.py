@@ -1,5 +1,6 @@
 from django.contrib import admin
 from iki.models import User, Course
+# from simple_history.admin import SimpleHistoryAdmin
 import os
 
 from reversion.admin import VersionAdmin
@@ -10,6 +11,7 @@ class YourModelAdmin(VersionAdmin):
     pass
 # admin.site.register(User)
 admin.site.register(Course)
+# admin.site.register(User,SimpleHistoryAdmin)
 # admin.site.register(SimpleHistoryAdmin)
 
 def delete_model(modeladmin, request, queryset):

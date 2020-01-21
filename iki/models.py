@@ -1,5 +1,5 @@
 from django.db import models
-from simple_history.models import HistoricalRecords
+# from simple_history.models import HistoricalRecords
 from utils.ComparisonBuckets import frequency_count_comp
 import numpy as np
 import json
@@ -12,7 +12,7 @@ class Course(models.Model):
     Course is an entity in the database representing the course in which the tool is user. It has the following attribute:
     - iki_course_id: the canvas id of the course
     """
-    iki_course_id = models.CharField(max_length=200)
+    iki_course_id = models.CharField(max_length=200, unique=True)
     # startdate = models.DateField(
     #     null=False,
     # )
@@ -80,7 +80,7 @@ class User(models.Model):
 
     log_count = models.IntegerField(default=1)
 
-    history = HistoricalRecords()
+    # history = HistoricalRecords(cascade_delete_history=True)
 
 
     def __str__(self):
@@ -94,13 +94,15 @@ class User(models.Model):
         """
 
         course_id = request['custom_canvas_course_id']
+        object, created = Course.objects.get_or_create(iki_course_id=course_id)
         # @todo: check if user belongs to authorised users by checkin email address against list
         user = User(
             name=request['lis_person_name_full'],
             email=request['lis_person_contact_email_primary'],
             lti_id=request['user_id'],
             iki_user_id=request['custom_canvas_user_id'],
-            course=Course.objects.create(iki_course_id=course_id),
+            # course=Course.objects.create(iki_course_id=course_id),
+            course = object,
             comparison_group=json.dumps(frequency_count_comp(np.zeros(7), 0)),
             goal_grade = request['goal']
             )

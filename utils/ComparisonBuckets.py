@@ -1,4 +1,4 @@
-def frequency_count_comp(grades, user_grade, nr_bins=18, minn=1.0, maxx=10.0):
+def frequency_count_comp(grades, user_grade, nr_bins=19, minn=1.0, maxx=10.5):
     """
     Creates bins for histogram plot of grades. Finds correct student assignment.
     :param gradedict: a dictionary with student id as key and average grade as value

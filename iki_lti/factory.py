@@ -39,10 +39,11 @@ class OAuthRequestValidater(object):
     @classmethod
     def check_signature(cls, key, secret, request):
         """Validate OAuth request using the python-oauth2 library.
+        If the signature is not valid, raise an exception.
 
         https://github.com/simplegeo/python-oauth2.
         """
-        validator = OAuthRequestValidater(key, secret)
+        validator = cls(key, secret)
         validator.is_valid(request)
 
 

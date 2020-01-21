@@ -53,18 +53,23 @@ def make_comparison_set(start_set, end_set,average,l_b, u_b, set_size):
     :return: end_set, aka the comparison set. If no comparison set has been found, returns a set of zeros
     """
 
-    # assert len(end_set == 7), "The size of the end set is too small. Must contain 7 elements"
+    # assert len(end_set) == set_size, "The size of the end set is too small. Must contain 7 elements"
     better_peers = end_set[end_set > average]
     worse_peers = end_set[end_set < average]
     worse_eq_peers = end_set[end_set <= average]
 
+    # the solution set must have 20-40% of its members worse than "average" and 30-50% worse-or-equal than average.
+    proportion_of_worse = random.uniform(0.2,0.40)
+    number_of_worse = set_size*proportion_of_worse
+    number_of_worse_eq = set_size*(proportion_of_worse+0.1)
+
     if average+l_b <= round(np.mean(end_set), 2) <= average+u_b and len(end_set) == set_size and \
-            len(better_peers)>len(worse_eq_peers) and len(worse_peers)>=1 and len(worse_eq_peers)>=2:
+            len(worse_peers)>=number_of_worse and len(worse_eq_peers)>=number_of_worse_eq:
         return end_set
 
     # assert len(start_set) > 0, "Could not find a subset from the set given"
     if len(start_set) == 0:
-        return np.zeros(7)
+        return np.zeros(set_size)
 
     end_set = np.append(end_set, start_set[0])
     start_set = start_set[1:]
@@ -124,10 +129,10 @@ def get_special_set(peers, average, isTop, isOther, size):
 
     highers = avs[np.where(avs > average)]
     lowers = avs[np.where(avs <= average)]
-    n_highers = np.round(size*0.6)
+    n_highers = int(np.round(size*0.6))
     n_lowers = size-n_highers
     comparison_set = np.append(lowers[-n_lowers:], highers[:n_highers])
-    assert len(comparison_set) == 7, 'wrong size of set for edge case'
+    assert len(comparison_set) == size, 'wrong size of set for edge case'
     return comparison_set
 
 
@@ -144,6 +149,10 @@ def get_set(average, goal_grade, av_goal_df, set_size):
     has been found, and in which edge case (if any) the user falls in.
     """
     # solution = []
+
+    if average == 0:
+        return np.zeros(set_size), 0, False, 'no grade'
+
     for i in range(10, 50):
         peers, w = get_same_goal_set(av_goal_df, i, goal_grade)
         if len(peers) == 0:
@@ -173,7 +182,7 @@ def get_set(average, goal_grade, av_goal_df, set_size):
             edge_case = 'bottom'
         else:
             isTop = False
-            isOther = False
+            isOther = True
             edge_case = 'other'
         solution = get_special_set(av_goal_df, average, isTop, isOther, set_size)
         has_solution = True
@@ -201,14 +210,15 @@ def make_comparison_group(user, average):
 
 
     av_goal_df = get_av_goal_data(user)
-    solution, window, has_comparison, edge_case = get_set(average, goal, av_goal_df, 7)
-    print('solution')
-    print(solution)
-    group_as_frequency = frequency_count_comp(solution, average)
+    set_size = 10
+    solution, window, has_comparison, edge_case = get_set(average, goal, av_goal_df, set_size)
+    print('solution: {}'.format(solution))
+    print('edge case: {}'.format(edge_case))
+    group_in_buckets = frequency_count_comp(solution, average)
     solution_mean = np.mean(solution)
     solution_std = np.std(solution)
     solution_mean_distance = abs(average-solution_mean)
-    return group_as_frequency, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case
+    return group_in_buckets, has_comparison, solution_mean, solution_std, solution_mean_distance, edge_case
 
 
 
