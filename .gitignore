@@ -4,3 +4,8 @@ api_url.txt
 __pycache__
 *.pyc
 .DS_Store
+*/migrations/*.py
+*.csv
+db.sqlite3
+dump.rdb
+

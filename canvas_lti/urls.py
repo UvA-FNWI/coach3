@@ -15,11 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url, include
+from utils.CanvasHelper import general_db_update
 
-from django.contrib import admin
-from django.urls import include, path
+#import django_app_lti.urls
+import iki_lti.urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('iki/', include('iki.urls')),
+    path('iki/', include(('iki.urls', 'iki'), namespace="iki")),
+    path('lti/', include(('iki_lti.urls', 'lti'), namespace = 'lti')),
 ]
+
+general_db_update(repeat=60*30)

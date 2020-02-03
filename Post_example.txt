@@ -1,0 +1,48 @@
+oauth2.Error: Invalid signature. Expected signature base string: b'POST&http%3A%2F%2F127.0.0.1%3A8000%2Flti%2F
+
+launch&context_id:d7373ad4e3e85d5fa75245ca50f543fc75b8542d
+context_label:DamienTest
+context_title:Damien test course
+custom_canvas_api_domain: uvadlo-tes.instructure.com
+custom_canvas_assignment_id: 2873
+custom_canvas_assignment_points_possible:0
+custom_canvas_assignment_title: test
+custom_canvas_course_id:729
+custom_canvas_enrollment_state:active
+custom_canvas_user_id: 507
+custom_canvas_user_login_id: testscience78-tst
+custom_canvas_workflow_state: claimed
+ext_ims_lis_basic_outcome_url: https://uvadlo-tes.instructure.com/api/lti/v1/tools/342/ext_grade_passback
+ext_lti_assignment_id: 17617bce-ec7b-4da2-ae1f-f369641d84a6
+ext_outcome_data_values_accepted: url%252Ctext
+ext_outcome_result_total_score_accepted: true
+ext_outcome_submission_submitted_at_accepted: true
+ext_outcomes_tool_placement_url: https://uvadlo-tes.instructure.com/api/lti/v1/turnitin/outcomes_placement/342
+ext_roles: urn:lti:instrole:ims/lis/Instructor%252Curn:lti:role:ims/lis/Instructor%252Curn:lti:sysrole:ims/lis%252FUser
+launch_presentation_document_target: iframe
+launch_presentation_locale: en-GB
+launch_presentation_return_url: https://uvadlo-tes.instructure.com/courses/729/external_content/success/external_tool_redirect
+lis_outcome_service_url: https://uvadlo-tes.instructure.com/api/lti/v1/tools/342/grade_passback
+lis_person_contact_email_primary; t.78.Science%2540nowhere4Canvas.nl
+lis_person_name_family: Science
+lis_person_name_full: testpersoon voor Science
+lis_person_name_given: testpersoon
+lis_person_sourcedid:testscience78-tes
+lti_message_type: basic-lti-launch-request
+lti_version: LTI-1p0
+oauth_callback: about%253Ablank
+oauth_consumer_key: ee2caf403070c663d99a89396cf1023c
+oauth_nonce: EzJ65Lj2dtbO99sbRU9HvwFRnhyo4G96MQj7FciwR0
+oauth_signature_method: HMAC-SHA1
+oauth_timestamp: 1550670145
+oauth_version: 1.0
+resource_link_id: 003b8e20233db3e4ab2b4e417f719dbc8510f3df
+resource_link_title: test
+roles: Instructor
+tool_consumer_info_product_family_code: canvas
+tool_consumer_info_version: cloud
+tool_consumer_instance_contact_email:notifications%2540instructure.com
+tool_consumer_instance_guid: hEos8HHSyxhe66DtZbh7YNUj4CcfAALvNo7vQU9l%253Acanvas-lms
+tool_consumer_instance_name: University of Amsterdam - Test
+user_id: 8905344ce5e0516445662fcfe7783bd564fa1a78
+user_image: https://uvadlo-tes.instructure.com/images/messages/avatar-50.png'
