@@ -2,26 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="74b2c62e-52d1-4d04-bdc8-504228346202" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/canvas_lti/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/canvas_lti/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/canvas_lti/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/canvas_lti/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/config.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/templates/iki/access_refused.html" beforeDir="false" afterPath="$PROJECT_DIR$/iki/templates/iki/access_refused.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/templates/iki/visuals.html" beforeDir="false" afterPath="$PROJECT_DIR$/iki/templates/iki/visuals.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki_lti/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki_lti/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki_lti/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki_lti/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iki_lti/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/iki_lti/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/AccessRights.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/AccessRights.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/CanvasHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/CanvasHelper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/ComparisonBuckets.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/ComparisonBuckets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/ComparisonGroupFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/ComparisonGroupFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/bayesian.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/bayesian.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -90,35 +72,8 @@
     <option name="myUseModuleSdk" value="true" />
     <option name="myModuleName" value="coach3" />
   </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/../Goal-setting pilot/full_data_analysis/analys.ipynb">
-                <provider selected="true" editor-type-id="jupyter-editor" />
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/AccessRights.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/CanvasHelper.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -186,7 +141,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/canvas_lti/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="510">
@@ -194,6 +149,27 @@
               <folding>
                 <element signature="e#634#666#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utils/ComparisonGroupFactory.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1724">
+              <caret line="135" column="25" selection-start-line="135" selection-start-column="25" selection-end-line="135" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#27#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/requirements.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -263,7 +239,6 @@
         <option value="$PROJECT_DIR$/iki/templates/iki/data/access_refused.html" />
         <option value="$PROJECT_DIR$/iki/urls.py" />
         <option value="$PROJECT_DIR$/access_and_data_rights.csv" />
-        <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/config.xml" />
         <option value="$PROJECT_DIR$/iki/templates/iki/visuals.css" />
         <option value="$PROJECT_DIR$/goal_grade.csv" />
@@ -295,6 +270,7 @@
         <option value="$PROJECT_DIR$/utils/dataset.py" />
         <option value="$PROJECT_DIR$/files/access_and_data_rights.csv" />
         <option value="$PROJECT_DIR$/utils/CanvasHelper.py" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
       </list>
     </option>
   </component>
@@ -377,7 +353,7 @@
     <property name="database.console.LAST_STATE" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/utils" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
-    <property name="settings.editor.selected.configurable" value="web.server" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -453,11 +429,12 @@
       <workItem from="1571045208672" duration="496000" />
       <workItem from="1578484022872" duration="50000" />
       <workItem from="1578484246948" duration="72000" />
+      <workItem from="1580135990107" duration="1060000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="320156000" />
+    <option name="totallyTimeSpent" value="321216000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -470,9 +447,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12300319" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.124068156" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -534,13 +510,6 @@
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="10" selection-start-column="10" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -725,16 +694,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/ComparisonGroupFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2193">
-          <caret line="135" column="25" selection-start-line="135" selection-start-column="25" selection-end-line="135" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/iki/templates/iki/visuals.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6630">
@@ -776,6 +735,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="40" column="16" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/AccessRights.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -835,16 +804,6 @@
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/AccessRights.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/canvas_lti/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -857,6 +816,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../Goal-setting pilot/full_data_analysis/analys.ipynb">
       <provider selected="true" editor-type-id="jupyter-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/ComparisonGroupFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1724">
+          <caret line="135" column="25" selection-start-line="135" selection-start-column="25" selection-end-line="135" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

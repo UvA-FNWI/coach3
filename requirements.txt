@@ -1,5 +1,5 @@
 ims_lti_py
-sklearn
+sklearn==0.21.2
 asn1crypto==0.24.0
 canvasapi==0.10.0
 certifi==2018.4.16
